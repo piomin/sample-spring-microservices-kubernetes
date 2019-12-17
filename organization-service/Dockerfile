@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:11-jre-slim
 ENV APP_FILE organization-service-1.0-SNAPSHOT.jar
 ENV APP_HOME /usr/apps
 EXPOSE 8080
