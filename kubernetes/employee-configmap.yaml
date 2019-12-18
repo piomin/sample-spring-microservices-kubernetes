@@ -6,4 +6,4 @@ data:
   logging.pattern.console: "%d{HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
   spring.cloud.kubernetes.discovery.all-namespaces: true
   spring.data.mongodb.database: admin
-  spring.data.mongodb.host: mongodb
+  spring.data.mongodb.host: default.mongodb
