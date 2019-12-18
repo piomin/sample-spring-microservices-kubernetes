@@ -1,3 +1,7 @@
 spring:
   application:
     name: department
+  cloud:
+    kubernetes:
+      secrets:
+        enableApi: true
