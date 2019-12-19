@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: piomin/gateway:1.0
+        image: piomin/gateway:1.1
         ports:
         - containerPort: 8080
 ---
@@ -30,6 +30,7 @@ spec:
   ports:
   - port: 8080
     protocol: TCP
+    targetPort: 8080
   selector:
     app: gateway
   type: NodePort
