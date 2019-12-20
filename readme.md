@@ -1,3 +1,9 @@
-## Quick Guide to Microservices with Kubernetes, Spring Boot 2.0 and Docker  [![Twitter](https://img.shields.io/twitter/follow/piotr_minkowski.svg?style=social&logo=twitter&label=Follow%20Me)](https://twitter.com/piotr_minkowski)
+# Microservices with Spring Boot and Spring Cloud on Kubernetes Demo Project [![Twitter](https://img.shields.io/twitter/follow/piotr_minkowski.svg?style=social&logo=twitter&label=Follow%20Me)](https://twitter.com/piotr_minkowski)
 
-Detailed description can be found here: [Quick Guide to Microservices with Kubernetes, Spring Boot 2.0 and Docker](https://piotrminkowski.wordpress.com/2018/08/02/quick-guide-to-microservices-with-kubernetes-spring-boot-2-0-and-docker/) 
+In this project I'm demonstrating you the most interesting features of [Spring Cloud Project](https://spring.io/projects/spring-cloud) for building microservice-based architecture that is deployed on Kubernetes. All the samples may be easily deployed on local Kubernetes single-node cluster - Minikube.
+
+
+## Getting Started 
+Currently you may find here some examples of microservices implementation using different projects from Spring Cloud. All the examples are divided into the branches and described in a separated articles on my blog. Here's a full list of available examples:
+1. Using Spring Boot and Spring Cloud for building microservices that may be easily deployed on Kubernetes. The example is available in the branch [master](https://github.com/piomin/sample-spring-microservices-kubernetes/tree/master). A detailed guide may be find in the following article: Detailed description can be found here: [Quick Guide to Microservices with Kubernetes, Spring Boot 2.0 and Docker](https://piotrminkowski.com/2018/08/02/quick-guide-to-microservices-with-kubernetes-spring-boot-2-0-and-docker/) 
+2. An introduction to Spring Cloud Kubernetes project, that shows its the most interesting features like discovery across many namespaces or Spring Boot property sources based on ConfigMap and Secret. The example is available in the branch [master](https://github.com/piomin/sample-spring-microservices-kubernetes/tree/master). A detailed guide may be find in the following article: Detailed description can be found here: [Microservices with Spring Cloud Kubernetes](https://piotrminkowski.com/2019/12/20/microservices-with-spring-cloud-kubernetes/) 
