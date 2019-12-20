@@ -26,8 +26,8 @@ Our sample microservices-based system consists of the following modules:
 
 The following picture illustrates the architecture described above including Kubernetes objects.
 
-https://piotrminkowski.files.wordpress.com/2018/07/micro-kube-1.png
+<img src="https://piotrminkowski.files.wordpress.com/2018/07/micro-kube-1.png title="Architecture" />
 
 You can distribute applications across multiple namespaces and use Spring Cloud Kubernetes `DiscoveryClient` and `Ribbon` for inter-service communication.
 
-https://piotrminkowski.files.wordpress.com/2019/12/microservices-with-spring-cloud-kubernetes-discovery.png
+<img src="https://piotrminkowski.files.wordpress.com/2019/12/microservices-with-spring-cloud-kubernetes-discovery.png title="Architecture" />
