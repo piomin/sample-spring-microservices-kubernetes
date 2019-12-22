@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway
+data:
+  application.yaml: |-
+    logging.pattern.console: "%d{HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+    spring.cloud.kubernetes.discovery.all-namespaces: true
+    spring.cloud.kubernetes.ribbon.allNamespaces: true
+    spring:
+      data:
+        mongodb:
+          database: admin
+          host: mongodb.default
+    zuul.routes.department.path: /department/**
+    zuul.routes.employee.path: /employee/**
+    zuul.routes.organization.path: /organization/**
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: d
+  labels:
+    app: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: piomin/gateway:1.1
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: d
+  labels:
+    app: gateway
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: gateway
+  type: NodePort

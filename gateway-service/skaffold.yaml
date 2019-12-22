@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+metadata:
+  name: gateway-service
+build:
+  artifacts:
+  - image: piomin/gateway
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes\deployment.yaml

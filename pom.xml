@@ -11,6 +11,7 @@
 		<module>department-service</module>
 		<module>organization-service</module>
 		<module>gateway-service</module>
+		<module>api-test</module>
 	</modules>
 	
 </project>
