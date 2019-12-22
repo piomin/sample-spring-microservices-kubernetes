@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+metadata:
+  name: department-service
+build:
+  artifacts:
+  - image: piomin/department
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes\deployment.yaml

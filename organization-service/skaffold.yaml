@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+metadata:
+  name: organization-service
+build:
+  artifacts:
+  - image: piomin/organization
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes\deployment.yaml
