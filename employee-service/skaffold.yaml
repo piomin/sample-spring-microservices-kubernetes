@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+metadata:
+  name: employee-service
+build:
+  artifacts:
+  - image: piomin/employee
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes\deployment.yaml

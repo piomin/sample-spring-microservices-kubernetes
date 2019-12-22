@@ -21,15 +21,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class EmployeeApplication {
 
-	@Autowired
-	EmployeeRepository repository;
-	
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeApplication.class, args);
 	}
 
 	@Bean
-	public Docket swaggerPersonApi10() {
+	public Docket swaggerApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 					.apis(RequestHandlerSelectors.basePackage("pl.piomin.services.employee.controller"))
