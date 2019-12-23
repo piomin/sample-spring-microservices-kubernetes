@@ -37,10 +37,16 @@ public class ApiApplication {
 
 		EndpointsList el = client.endpoints().inAnyNamespace().list();
 		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("employee"));
-		Map<String, List<Endpoints>> m = s.collect(Collectors.groupingBy(endpoints -> endpoints.getMetadata().getNamespace()));
-		if (m.keySet().size() > 1)
-			LOGGER.info("Non unique name across many namespaces");
-		s.forEach(this::printEndpoints);
+		List<Endpoints> l = s.collect(Collectors.toList());
+
+		LOGGER.info("Size: {}", l.size());
+		LOGGER.info("Pods: {}", l.get(0).getSubsets().size());
+
+//		s.forEach(this::printEndpoints);
+//		Map<String, List<Endpoints>> m = s.collect(Collectors.groupingBy(endpoints -> endpoints.getMetadata().getNamespace()));
+//		if (m.keySet().size() > 1)
+//			LOGGER.info("Non unique name across many namespaces");
+
 	}
 
 	private void printEndpoints(Endpoints e) {

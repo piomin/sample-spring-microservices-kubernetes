@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 @EnableDiscoveryClient
 @EnableZuulProxy
 @EnableSwagger2
-//@AutoConfigureAfter(RibbonAutoConfiguration.class)
-//@RibbonClients(defaultConfiguration = RibbonConfiguration.class)
+@AutoConfigureAfter(RibbonAutoConfiguration.class)
+@RibbonClients(defaultConfiguration = RibbonConfiguration.class)
 public class GatewayApplication {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GatewayApplication.class);
