@@ -7,16 +7,16 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import io.fabric8.kubernetes.api.model.EndpointSubset;
-import io.fabric8.kubernetes.api.model.Endpoints;
-import io.fabric8.kubernetes.api.model.EndpointsList;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import one.util.streamex.StreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.kubernetes.PodUtils;
 
 @SpringBootApplication
 public class ApiApplication {
@@ -29,6 +29,8 @@ public class ApiApplication {
 
 	@Autowired
 	KubernetesClient client;
+	@Autowired
+	PodUtils utils;
 
 	@PostConstruct
 	public void init() {
@@ -47,6 +49,24 @@ public class ApiApplication {
 //		if (m.keySet().size() > 1)
 //			LOGGER.info("Non unique name across many namespaces");
 
+		if (!utils.isInsideKubernetes()) {
+			LOGGER.info("Registering...");
+			e = client.endpoints().inNamespace("default").withName("testx").get();
+			printEndpoints(e);
+			if (!endpointExists(e, "192.168.99.1", 8080))
+				LOGGER.info("Required");
+			else
+				LOGGER.info("Exists");
+		}
+//		ObjectMeta metadata = new ObjectMetaBuilder().withName("testx").withNamespace("default").build();
+//		EndpointAddress address = new EndpointAddressBuilder().withIp("192.168.99.1").build();
+//		EndpointPort port = new EndpointPortBuilder().withPort(8080).build();
+//		EndpointSubset subset = new EndpointSubsetBuilder().withAddresses(address).withPorts(port).build();
+//		Endpoints endpoints = client.endpoints().createNew().withMetadata(metadata).withSubsets(subset).done();
+//		printEndpoints(endpoints);
+
+//		e = client.endpoints().inNamespace("default").withName("testx").get();
+//		printEndpoints(e);
 	}
 
 	private void printEndpoints(Endpoints e) {
@@ -55,7 +75,22 @@ public class ApiApplication {
 			subset.getAddresses().forEach(address -> {
 				LOGGER.info("IP: {}.{}->{}", e.getMetadata().getName(), e.getMetadata().getNamespace(), address.getIp());
 			});
+			subset.getPorts().forEach(port -> {
+				LOGGER.info("PORT: {}.{}->{}", e.getMetadata().getName(), e.getMetadata().getNamespace(), port.getPort());
+			});
 		});
+	}
+
+	private boolean endpointExists(Endpoints e, String ip, Integer port) {
+		boolean exists = false;
+		for (EndpointSubset subset : e.getSubsets()) {
+			exists = StreamEx.of(subset.getAddresses())
+					.zipWith(subset.getPorts().stream())
+					.anyMatch(entry -> entry.getKey().getIp().equals(ip) && entry.getValue().getPort().equals(port));
+			if (exists)
+				return true;
+		}
+		return false;
 	}
 
 }
