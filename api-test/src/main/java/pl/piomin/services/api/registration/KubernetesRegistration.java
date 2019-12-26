@@ -60,4 +60,9 @@ public class KubernetesRegistration implements Registration {
     public String getScheme() {
         return "http";
     }
+
+    public KubernetesDiscoveryProperties getProperties() {
+        return properties;
+    }
+
 }
