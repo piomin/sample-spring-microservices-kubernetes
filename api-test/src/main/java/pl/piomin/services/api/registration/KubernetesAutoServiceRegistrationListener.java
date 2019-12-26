@@ -6,6 +6,12 @@ import org.springframework.context.event.SmartApplicationListener;
 
 public class KubernetesAutoServiceRegistrationListener implements SmartApplicationListener {
 
+    private final KubernetesAutoServiceRegistration autoServiceRegistration;
+
+    KubernetesAutoServiceRegistrationListener(KubernetesAutoServiceRegistration autoServiceRegistration) {
+        this.autoServiceRegistration = autoServiceRegistration;
+    }
+
     @Override
     public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
         return WebServerInitializedEvent.class.isAssignableFrom(eventType);
@@ -25,6 +31,9 @@ public class KubernetesAutoServiceRegistrationListener implements SmartApplicati
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
         if (applicationEvent instanceof WebServerInitializedEvent) {
             WebServerInitializedEvent event = (WebServerInitializedEvent) applicationEvent;
+            int port = event.getWebServer().getPort();
+            autoServiceRegistration.start();
         }
     }
+
 }
