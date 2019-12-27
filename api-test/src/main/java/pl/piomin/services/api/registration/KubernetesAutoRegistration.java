@@ -17,6 +17,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class KubernetesAutoRegistration extends KubernetesRegistration {
 
 	public static final char SEPARATOR = '-';
@@ -30,15 +33,20 @@ public class KubernetesAutoRegistration extends KubernetesRegistration {
 	}
 
 	public static KubernetesAutoRegistration registration(KubernetesDiscoveryProperties properties,
-			ApplicationContext context) {
+			ApplicationContext context) throws UnknownHostException {
 		String appName = getAppName(properties, context.getEnvironment());
 		ObjectMeta metadata = new ObjectMetaBuilder().withName(appName).withNamespace("external").build();
-		EndpointAddress address = new EndpointAddressBuilder().withIp("192.168.99.1").build();
+		String ip = InetAddress.getLocalHost().getHostAddress();
+		EndpointAddress address = new EndpointAddressBuilder().withIp(ip).build();
 		EndpointPort port = new EndpointPortBuilder().withPort(8080).build();
 		EndpointSubset subset = new EndpointSubsetBuilder().withAddresses(address).withPorts(port).build();
 		Endpoints endpoints = new EndpointsBuilder().withSubsets(subset).withMetadata(metadata).build();
 		KubernetesAutoRegistration r = new KubernetesAutoRegistration(endpoints, properties, context);
 		return r;
+	}
+
+	public void setPort(Integer port) {
+		endpoints.getSubsets().get(0).getPorts().get(0).setPort(port);
 	}
 
 	/**

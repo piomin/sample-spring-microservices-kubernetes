@@ -32,6 +32,7 @@ public class KubernetesAutoServiceRegistrationListener implements SmartApplicati
         if (applicationEvent instanceof WebServerInitializedEvent) {
             WebServerInitializedEvent event = (WebServerInitializedEvent) applicationEvent;
             int port = event.getWebServer().getPort();
+            autoServiceRegistration.setPort(port);
             autoServiceRegistration.start();
         }
     }

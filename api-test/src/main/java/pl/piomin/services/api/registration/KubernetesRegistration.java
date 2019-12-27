@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class KubernetesRegistration implements Registration {
 
-    private final Endpoints endpoints;
+    protected final Endpoints endpoints;
     private KubernetesDiscoveryProperties properties;
 
     public KubernetesRegistration(Endpoints endpoints, KubernetesDiscoveryProperties properties) {

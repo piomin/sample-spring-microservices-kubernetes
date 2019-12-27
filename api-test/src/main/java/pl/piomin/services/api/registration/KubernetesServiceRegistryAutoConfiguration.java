@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(name = "spring.cloud.kubernetes.discovery.registration.enabled", value = "true")
+@ConditionalOnProperty(name = "spring.cloud.kubernetes.discovery.register", havingValue = "true")
 @AutoConfigureBefore(ServiceRegistryAutoConfiguration.class)
 public class KubernetesServiceRegistryAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public KubernetesServiceRegistry consulServiceRegistry(KubernetesClient client, KubernetesDiscoveryProperties properties) {
+	public KubernetesServiceRegistry serviceRegistry(KubernetesClient client, KubernetesDiscoveryProperties properties) {
 		return new KubernetesServiceRegistry(client, properties);
 	}
 

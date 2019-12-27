@@ -9,12 +9,12 @@ import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryPropert
 public class KubernetesAutoServiceRegistration extends AbstractAutoServiceRegistration<KubernetesRegistration> {
 
 	private KubernetesDiscoveryProperties properties;
-	private KubernetesRegistration registration;
+	private KubernetesAutoRegistration registration;
 	private PodUtils podUtils;
 
 	KubernetesAutoServiceRegistration(ServiceRegistry<KubernetesRegistration> serviceRegistry,
 			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
-			KubernetesDiscoveryProperties properties, KubernetesRegistration registration,
+			KubernetesDiscoveryProperties properties, KubernetesAutoRegistration registration,
 			PodUtils podUtils) {
 		super(serviceRegistry, autoServiceRegistrationProperties);
 		this.properties = properties;
@@ -33,13 +33,17 @@ public class KubernetesAutoServiceRegistration extends AbstractAutoServiceRegist
 	}
 
 	@Override
-	protected KubernetesRegistration getRegistration() {
+	protected KubernetesAutoRegistration getRegistration() {
 		return registration;
 	}
 
 	@Override
-	protected KubernetesRegistration getManagementRegistration() {
+	protected KubernetesAutoRegistration getManagementRegistration() {
 		return registration;
+	}
+
+	public void setPort(Integer port) {
+		registration.setPort(port);
 	}
 
 }

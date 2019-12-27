@@ -49,15 +49,15 @@ public class ApiApplication {
 //		if (m.keySet().size() > 1)
 //			LOGGER.info("Non unique name across many namespaces");
 
-		if (!utils.isInsideKubernetes()) {
-			LOGGER.info("Registering...");
-			e = client.endpoints().inNamespace("default").withName("testx").get();
-			printEndpoints(e);
-			if (!endpointExists(e, "192.168.99.1", 8080))
-				LOGGER.info("Required");
-			else
-				LOGGER.info("Exists");
-		}
+//		if (!utils.isInsideKubernetes()) {
+//			LOGGER.info("Registering...");
+//			e = client.endpoints().inNamespace("default").withName("testx").get();
+//			printEndpoints(e);
+//			if (!endpointExists(e, "192.168.99.1", 8080))
+//				LOGGER.info("Required");
+//			else
+//				LOGGER.info("Exists");
+//		}
 //		ObjectMeta metadata = new ObjectMetaBuilder().withName("testx").withNamespace("default").build();
 //		EndpointAddress address = new EndpointAddressBuilder().withIp("192.168.99.1").build();
 //		EndpointPort port = new EndpointPortBuilder().withPort(8080).build();
