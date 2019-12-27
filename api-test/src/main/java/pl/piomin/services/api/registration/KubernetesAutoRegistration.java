@@ -11,12 +11,14 @@ import io.fabric8.kubernetes.api.model.EndpointsBuilder;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.commons.util.IdUtils;
 import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -28,7 +30,7 @@ public class KubernetesAutoRegistration extends KubernetesRegistration {
 
 	public KubernetesAutoRegistration(Endpoints endpoints, KubernetesDiscoveryProperties properties,
 			ApplicationContext applicationContext) {
-		super(endpoints, properties);
+		super(properties);
 		this.applicationContext = applicationContext;
 	}
 
@@ -37,6 +39,8 @@ public class KubernetesAutoRegistration extends KubernetesRegistration {
 		String appName = getAppName(properties, context.getEnvironment());
 		ObjectMeta metadata = new ObjectMetaBuilder().withName(appName).withNamespace("external").build();
 		String ip = InetAddress.getLocalHost().getHostAddress();
+		ip = "192.168.99.1";
+		String hostname = InetAddress.getLocalHost().getHostName();
 		EndpointAddress address = new EndpointAddressBuilder().withIp(ip).build();
 		EndpointPort port = new EndpointPortBuilder().withPort(8080).build();
 		EndpointSubset subset = new EndpointSubsetBuilder().withAddresses(address).withPorts(port).build();
@@ -47,6 +51,11 @@ public class KubernetesAutoRegistration extends KubernetesRegistration {
 
 	public void setPort(Integer port) {
 		endpoints.getSubsets().get(0).getPorts().get(0).setPort(port);
+	}
+
+	@PostConstruct
+	public void init() {
+
 	}
 
 	/**

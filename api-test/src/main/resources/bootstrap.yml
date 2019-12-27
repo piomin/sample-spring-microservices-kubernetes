@@ -1,5 +1,4 @@
 spring.application.name: api-test
-
 spring:
   cloud:
     kubernetes:

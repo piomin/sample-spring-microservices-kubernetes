@@ -34,15 +34,18 @@ public class ApiApplication {
 
 	@PostConstruct
 	public void init() {
-		Endpoints e = client.endpoints().inNamespace("c").withName("employee").get();
-		printEndpoints(e);
+//		Endpoints e = client.endpoints().inNamespace("c").withName("employee").get();
+//		printEndpoints(e);
 
 		EndpointsList el = client.endpoints().inAnyNamespace().list();
-		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("employee"));
-		List<Endpoints> l = s.collect(Collectors.toList());
+		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("api-test"));
+		s.forEach(this::printEndpoints);
 
-		LOGGER.info("Size: {}", l.size());
-		LOGGER.info("Pods: {}", l.get(0).getSubsets().size());
+//		List<Endpoints> l = s.collect(Collectors.toList());
+//
+//		LOGGER.info("Size: {}", l.size());
+//		if (l.size() > 0)
+//			LOGGER.info("Pods: {}", l.get(0).getSubsets().size());
 
 //		s.forEach(this::printEndpoints);
 //		Map<String, List<Endpoints>> m = s.collect(Collectors.groupingBy(endpoints -> endpoints.getMetadata().getNamespace()));
@@ -71,6 +74,7 @@ public class ApiApplication {
 
 	private void printEndpoints(Endpoints e) {
 		List<EndpointSubset> s = e.getSubsets();
+		LOGGER.info("List for: uid={}, generated={}", e.getMetadata().getUid(), e.getMetadata().getGenerateName());
 		s.forEach(subset -> {
 			subset.getAddresses().forEach(address -> {
 				LOGGER.info("IP: {}.{}->{}", e.getMetadata().getName(), e.getMetadata().getNamespace(), address.getIp());

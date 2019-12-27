@@ -1,44 +1,44 @@
 package pl.piomin.services.api.registration;
 
-import io.fabric8.kubernetes.api.model.Endpoints;
 import org.springframework.cloud.client.serviceregistry.Registration;
 import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryProperties;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 public class KubernetesRegistration implements Registration {
 
-    protected final Endpoints endpoints;
     private KubernetesDiscoveryProperties properties;
 
-    public KubernetesRegistration(Endpoints endpoints, KubernetesDiscoveryProperties properties) {
-        this.endpoints = endpoints;
-        this.properties = properties;
-    }
+    private String serviceId;
+    private String instanceId;
+    private String host;
+    private int port;
+    private Map<String, String> metadata = new HashMap<>();
 
-    public Endpoints getService() {
-        return endpoints;
+    public KubernetesRegistration(KubernetesDiscoveryProperties properties) {
+        this.properties = properties;
     }
 
     @Override
     public String getInstanceId() {
-        return null;
+        return instanceId;
     }
 
     @Override
     public String getServiceId() {
-        return endpoints.getMetadata().getName();
+        return serviceId;
     }
 
     @Override
     public String getHost() {
-        return endpoints.getSubsets().get(0).getAddresses().get(0).getIp();
+        return host;
     }
 
     @Override
     public int getPort() {
-        return endpoints.getSubsets().get(0).getPorts().get(0).getPort();
+        return port;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class KubernetesRegistration implements Registration {
 
     @Override
     public Map<String, String> getMetadata() {
-        return null;
+        return metadata;
     }
 
     @Override
@@ -61,8 +61,24 @@ public class KubernetesRegistration implements Registration {
         return "http";
     }
 
-    public KubernetesDiscoveryProperties getProperties() {
-        return properties;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
     }
 
 }

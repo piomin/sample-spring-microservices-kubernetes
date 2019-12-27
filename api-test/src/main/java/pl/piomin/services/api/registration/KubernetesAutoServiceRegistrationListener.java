@@ -1,10 +1,16 @@
 package pl.piomin.services.api.registration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.SmartApplicationListener;
 
+import java.net.UnknownHostException;
+
 public class KubernetesAutoServiceRegistrationListener implements SmartApplicationListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(KubernetesAutoServiceRegistrationListener.class);
 
     private final KubernetesAutoServiceRegistration autoServiceRegistration;
 
@@ -31,9 +37,12 @@ public class KubernetesAutoServiceRegistrationListener implements SmartApplicati
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
         if (applicationEvent instanceof WebServerInitializedEvent) {
             WebServerInitializedEvent event = (WebServerInitializedEvent) applicationEvent;
-            int port = event.getWebServer().getPort();
-            autoServiceRegistration.setPort(port);
-            autoServiceRegistration.start();
+            try {
+                autoServiceRegistration.setRegistration(event.getWebServer().getPort());
+                autoServiceRegistration.start();
+            } catch (UnknownHostException e) {
+                LOGGER.error("Error registering to kubernetes", e);
+            }
         }
     }
 
