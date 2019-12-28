@@ -31,10 +31,9 @@ public class KubernetesAutoServiceRegistrationAutoConfiguration {
 			@Qualifier("serviceRegistry") KubernetesServiceRegistry registry,
 			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
 			KubernetesDiscoveryProperties properties,
-			KubernetesAutoRegistration registration,
 			PodUtils podUtils) {
 		return new KubernetesAutoServiceRegistration(registry,
-				autoServiceRegistrationProperties, properties, registration, podUtils);
+				autoServiceRegistrationProperties, properties, podUtils);
 	}
 
 	@Bean

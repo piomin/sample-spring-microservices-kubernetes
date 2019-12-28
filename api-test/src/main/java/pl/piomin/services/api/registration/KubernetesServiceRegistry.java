@@ -1,6 +1,19 @@
 package pl.piomin.services.api.registration;
 
-import io.fabric8.kubernetes.api.model.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import io.fabric8.kubernetes.api.model.EndpointAddress;
+import io.fabric8.kubernetes.api.model.EndpointAddressBuilder;
+import io.fabric8.kubernetes.api.model.EndpointPort;
+import io.fabric8.kubernetes.api.model.EndpointPortBuilder;
+import io.fabric8.kubernetes.api.model.EndpointSubset;
+import io.fabric8.kubernetes.api.model.EndpointSubsetBuilder;
+import io.fabric8.kubernetes.api.model.Endpoints;
+import io.fabric8.kubernetes.api.model.EndpointsBuilder;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.ObjectMetaBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.serviceregistry.ServiceRegistry;
 import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryProperties;
 
-import java.util.List;
-
 public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegistration> {
 
     private static final Logger LOG = LoggerFactory.getLogger(KubernetesServiceRegistry.class);
+    private static final int FIRST_PORT = 0;
 
     private final KubernetesClient client;
     private KubernetesDiscoveryProperties properties;
@@ -32,10 +44,18 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
         if (endpoints == null) {
             client.endpoints().create(create(registration));
         } else {
+            boolean updated = false;
             for (EndpointSubset subset : endpoints.getSubsets()) {
-                if (subset.getPorts().get(0).getPort().equals(registration.getPort())) {
+                if (subset.getPorts().get(FIRST_PORT).getPort().equals(registration.getPort())) {
                     subset.getAddresses().add(new EndpointAddressBuilder().withIp(registration.getHost()).build());
+                    updated = true;
                 }
+            }
+            if (!updated) {
+                EndpointAddress address = new EndpointAddressBuilder().withIp(registration.getHost()).build();
+                EndpointPort port = new EndpointPortBuilder().withPort(registration.getPort()).build();
+                EndpointSubset subset = new EndpointSubsetBuilder().withAddresses(address).withPorts(port).build();
+                endpoints.getSubsets().add(subset);
             }
             client.endpoints().createOrReplace(endpoints);
         }
@@ -46,17 +66,29 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
     public void deregister(KubernetesRegistration registration) {
         LOG.info("De-registering service with kubernetes: " + registration.getInstanceId());
         Endpoints endpoints = client.endpoints()
-                .inNamespace(registration.getService().getMetadata().getNamespace())
-                .withName(registration.getService().getMetadata().getName())
+                .inNamespace(registration.getMetadata().get("namespace"))
+                .withName(registration.getMetadata().get("name"))
                 .get();
-        List<EndpointAddress> addresses = endpoints.getSubsets().get(0).getAddresses();
-        if (addresses.size() == 1 && addresses.get(0).getIp().equals(registration.getService().getSubsets().get(0).getAddresses().get(0).getIp())) {
-            client.endpoints().delete(registration.getService());
-        } else {
-            addresses.remove(registration.getService().getSubsets().get(0).getAddresses().get(0));
-            endpoints.getSubsets().get(0).setAddresses(addresses);
-            client.endpoints().createOrReplace(endpoints);
-        }
+        Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).equals(registration.getPort())).findFirst();
+        optSubset.ifPresent(s -> {
+            EndpointSubset subset = optSubset.get();
+            if (subset.getAddresses().size() == 1 && endpoints.getSubsets().size() == 1) {
+                client.endpoints().delete(endpoints);
+            } else {
+                List<EndpointAddress> addresses = subset.getAddresses().stream()
+                        .filter(address -> !address.getIp().equals(registration.getHost()))
+                        .collect(Collectors.toList());
+                if (addresses.size() > 0) {
+                    subset.setAddresses(addresses);
+                    int i = endpoints.getSubsets().indexOf(subset);
+                    endpoints.getSubsets().set(i, subset);
+                } else {
+                    endpoints.getSubsets().remove(subset);
+                }
+                client.endpoints().createOrReplace(endpoints);
+            }
+
+        });
     }
 
     @Override
@@ -85,4 +117,5 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
         Endpoints endpoints = new EndpointsBuilder().withSubsets(subset).withMetadata(metadata).build();
         return endpoints;
     }
+
 }
