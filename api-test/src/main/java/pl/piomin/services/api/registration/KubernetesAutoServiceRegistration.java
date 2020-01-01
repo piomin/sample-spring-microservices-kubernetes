@@ -19,14 +19,15 @@ public class KubernetesAutoServiceRegistration extends AbstractAutoServiceRegist
 
 	KubernetesAutoServiceRegistration(ServiceRegistry<KubernetesRegistration> serviceRegistry,
 			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
-			KubernetesDiscoveryProperties properties, PodUtils podUtils) {
+			KubernetesRegistration registration, KubernetesDiscoveryProperties properties,
+			PodUtils podUtils) {
 		super(serviceRegistry, autoServiceRegistrationProperties);
 		this.properties = properties;
+		this.registration = registration;
 		this.podUtils = podUtils;
 	}
 
 	public void setRegistration(int port) throws UnknownHostException {
-		KubernetesRegistration registration = new KubernetesRegistration(properties);
 		String ip = InetAddress.getLocalHost().getHostAddress();
 		registration.setHost(ip);
 		registration.setPort(port);

@@ -12,13 +12,17 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import one.util.streamex.StreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.piomin.services.api.registration.KubernetesRegistration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.kubernetes.PodUtils;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @SpringBootApplication
+@EnableScheduling
 public class ApiApplication {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiApplication.class);
@@ -95,6 +99,18 @@ public class ApiApplication {
 				return true;
 		}
 		return false;
+	}
+
+	@Autowired
+	KubernetesRegistration registration;
+
+	@Scheduled(fixedDelay = 10000)
+	public void watch() {
+		client.endpoints()
+				.inNamespace(registration.getMetadata().get("namespace"))
+				.withName(registration.getMetadata().get("name"))
+				.edit()
+				.editMatchingSubset(builder -> builder.hasMatchingAddress(v -> v.getIp().equals(registration.getHost())));
 	}
 
 }

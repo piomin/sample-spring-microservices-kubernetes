@@ -31,9 +31,9 @@ public class KubernetesAutoServiceRegistrationAutoConfiguration {
 			@Qualifier("serviceRegistry") KubernetesServiceRegistry registry,
 			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
 			KubernetesDiscoveryProperties properties,
-			PodUtils podUtils) {
+			KubernetesRegistration registration, PodUtils podUtils) {
 		return new KubernetesAutoServiceRegistration(registry,
-				autoServiceRegistrationProperties, properties, podUtils);
+				autoServiceRegistrationProperties, registration, properties, podUtils);
 	}
 
 	@Bean
@@ -42,8 +42,8 @@ public class KubernetesAutoServiceRegistrationAutoConfiguration {
 	}
 
 	@Bean
-	public KubernetesAutoRegistration registration(KubernetesDiscoveryProperties properties, ApplicationContext context) throws UnknownHostException {
-		return KubernetesAutoRegistration.registration(properties, context);
+	public KubernetesRegistration registration(KubernetesDiscoveryProperties properties) throws UnknownHostException {
+		return new KubernetesRegistration(properties);
 	}
 
 }
