@@ -2,6 +2,7 @@ package pl.piomin.services.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -9,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.Resource;
 import one.util.streamex.StreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,12 +107,28 @@ public class ApiApplication {
 	KubernetesRegistration registration;
 
 	@Scheduled(fixedDelay = 10000)
-	public void watch() {
-		client.endpoints()
+	public void update() {
+		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
 				.inNamespace(registration.getMetadata().get("namespace"))
-				.withName(registration.getMetadata().get("name"))
-				.edit()
-				.editMatchingSubset(builder -> builder.hasMatchingAddress(v -> v.getIp().equals(registration.getHost())));
+				.withName(registration.getMetadata().get("name"));
+		Endpoints endpoints = resource.get();
+
+		Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).getPort().equals(registration.getPort())).findFirst();
+		optSubset.ifPresent(subset -> {
+			final int index = endpoints.getSubsets().indexOf(subset);
+			subset.getAddresses().stream()
+					.filter(address -> address.getIp().equals(registration.getHost()))
+					.map(address -> {
+						address.setAdditionalProperty("lastUpdated", System.currentTimeMillis());
+						return address;
+					})
+					.findAny().ifPresent(address -> {
+						int i = subset.getAddresses().indexOf(address);
+						subset.getAddresses().set(i, address);
+						endpoints.getSubsets().set(index, subset);
+						client.endpoints().createOrReplace(endpoints);
+					});
+		});
 	}
 
 }

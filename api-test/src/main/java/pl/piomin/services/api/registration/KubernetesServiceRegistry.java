@@ -83,7 +83,7 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
                 .withName(registration.getMetadata().get("name"));
         Endpoints endpoints = resource.get();
 
-        Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).equals(registration.getPort())).findFirst();
+        Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).getPort().equals(registration.getPort())).findFirst();
         optSubset.ifPresent(s -> {
             EndpointSubset subset = optSubset.get();
             if (subset.getAddresses().size() == 1 && endpoints.getSubsets().size() == 1) {
