@@ -40,12 +40,12 @@ public class ApiApplication {
 
 	@PostConstruct
 	public void init() {
-//		Endpoints e = client.endpoints().inNamespace("c").withName("employee").get();
-//		printEndpoints(e);
+		Endpoints e = client.endpoints().inNamespace("external").withName("api-test").get();
+		printEndpoints(e);
 
-		EndpointsList el = client.endpoints().inAnyNamespace().list();
-		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("api-test"));
-		s.forEach(this::printEndpoints);
+//		EndpointsList el = client.endpoints().inAnyNamespace().list();
+//		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("api-test"));
+//		s.forEach(this::printEndpoints);
 
 //		List<Endpoints> l = s.collect(Collectors.toList());
 //
@@ -106,7 +106,7 @@ public class ApiApplication {
 	@Autowired
 	KubernetesRegistration registration;
 
-	@Scheduled(fixedDelay = 10000)
+//	@Scheduled(fixedDelay = 10000)
 	public void update() {
 		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
 				.inNamespace(registration.getMetadata().get("namespace"))

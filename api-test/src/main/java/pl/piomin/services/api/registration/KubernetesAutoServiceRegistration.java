@@ -33,6 +33,7 @@ public class KubernetesAutoServiceRegistration extends AbstractAutoServiceRegist
 		registration.setPort(port);
 		registration.setServiceId(getAppName(properties, getContext().getEnvironment()) + "." + getNamespace(getContext().getEnvironment()));
 		registration.getMetadata().put("namespace", getNamespace(getContext().getEnvironment()));
+		registration.getMetadata().put("name", getAppName(properties, getContext().getEnvironment()));
 		this.registration = registration;
 	}
 

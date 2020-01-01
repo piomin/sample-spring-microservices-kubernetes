@@ -44,7 +44,8 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
                 .withName(registration.getMetadata().get("name"));
         Endpoints endpoints = resource.get();
         if (endpoints == null) {
-            client.endpoints().create(create(registration));
+            Endpoints e = client.endpoints().create(create(registration));
+            LOG.info("Endpoints: {}",e);
         } else {
 //            boolean updated = false;
             Endpoints updatedEndpoints = resource.edit()
