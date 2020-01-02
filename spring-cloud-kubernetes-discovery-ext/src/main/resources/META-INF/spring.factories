@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.cloud.kubernetes.discovery.ext.KubernetesServiceRegistryAutoConfiguration,\
+org.springframework.cloud.kubernetes.discovery.ext.KubernetesAutoServiceRegistrationAutoConfiguration

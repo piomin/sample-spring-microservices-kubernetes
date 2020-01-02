@@ -8,3 +8,5 @@ spring:
         masterUrl: 192.168.99.100:8443
 #        namespace: false
         trustCerts: true
+
+#server.port: 0

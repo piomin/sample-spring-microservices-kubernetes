@@ -1,7 +1,6 @@
-package pl.piomin.services.api.registration;
+package org.springframework.cloud.kubernetes.discovery.ext;
 
 import io.fabric8.kubernetes.client.KubernetesClient;
-
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

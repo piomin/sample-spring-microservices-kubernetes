@@ -1,4 +1,4 @@
-package pl.piomin.services.api.registration;
+package org.springframework.cloud.kubernetes.discovery.ext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

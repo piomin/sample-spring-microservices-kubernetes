@@ -12,6 +12,7 @@
 		<module>organization-service</module>
 		<module>gateway-service</module>
 		<module>api-test</module>
-	</modules>
+        <module>spring-cloud-kubernetes-discovery-ext</module>
+    </modules>
 	
 </project>

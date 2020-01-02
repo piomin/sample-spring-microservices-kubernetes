@@ -1,10 +1,8 @@
 package pl.piomin.services.api;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import javax.annotation.PostConstruct;
 
@@ -14,12 +12,12 @@ import io.fabric8.kubernetes.client.dsl.Resource;
 import one.util.streamex.StreamEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.piomin.services.api.registration.KubernetesRegistration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.kubernetes.PodUtils;
+import org.springframework.cloud.kubernetes.discovery.ext.KubernetesRegistration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -40,8 +38,12 @@ public class ApiApplication {
 
 	@PostConstruct
 	public void init() {
-		Endpoints e = client.endpoints().inNamespace("external").withName("api-test").get();
-		printEndpoints(e);
+		try {
+			Endpoints e = client.endpoints().inNamespace("external").withName("api-test").get();
+			printEndpoints(e);
+		} catch (Exception e) {
+
+		}
 
 //		EndpointsList el = client.endpoints().inAnyNamespace().list();
 //		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("api-test"));
@@ -80,7 +82,7 @@ public class ApiApplication {
 
 	private void printEndpoints(Endpoints e) {
 		List<EndpointSubset> s = e.getSubsets();
-		LOGGER.info("List for: uid={}, generated={}", e.getMetadata().getUid(), e.getMetadata().getGenerateName());
+		LOGGER.info("Listing: {}", e);
 		s.forEach(subset -> {
 			subset.getAddresses().forEach(address -> {
 				LOGGER.info("IP: {}.{}->{}", e.getMetadata().getName(), e.getMetadata().getNamespace(), address.getIp());
@@ -104,15 +106,16 @@ public class ApiApplication {
 	}
 
 	@Autowired
-	KubernetesRegistration registration;
+    KubernetesRegistration registration;
 
-//	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 10000)
 	public void update() {
 		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
 				.inNamespace(registration.getMetadata().get("namespace"))
 				.withName(registration.getMetadata().get("name"));
 		Endpoints endpoints = resource.get();
 
+		LOGGER.info("Updating: {}", endpoints);
 		Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).getPort().equals(registration.getPort())).findFirst();
 		optSubset.ifPresent(subset -> {
 			final int index = endpoints.getSubsets().indexOf(subset);
@@ -126,6 +129,7 @@ public class ApiApplication {
 						int i = subset.getAddresses().indexOf(address);
 						subset.getAddresses().set(i, address);
 						endpoints.getSubsets().set(index, subset);
+						LOGGER.info("Endpoint updated: {}", endpoints);
 						client.endpoints().createOrReplace(endpoints);
 					});
 		});

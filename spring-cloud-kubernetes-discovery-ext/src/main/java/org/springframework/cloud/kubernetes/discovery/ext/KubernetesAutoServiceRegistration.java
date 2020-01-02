@@ -1,4 +1,4 @@
-package pl.piomin.services.api.registration;
+package org.springframework.cloud.kubernetes.discovery.ext;
 
 import org.springframework.cloud.client.serviceregistry.AbstractAutoServiceRegistration;
 import org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationProperties;
