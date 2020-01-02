@@ -110,6 +110,8 @@ public class ApiApplication {
 
 	@Scheduled(fixedDelay = 10000)
 	public void update() {
+		if (registration.getMetadata().isEmpty())
+			return;
 		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
 				.inNamespace(registration.getMetadata().get("namespace"))
 				.withName(registration.getMetadata().get("name"));

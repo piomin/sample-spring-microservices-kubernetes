@@ -14,21 +14,23 @@ import java.net.UnknownHostException;
 public class KubernetesAutoServiceRegistration extends AbstractAutoServiceRegistration<KubernetesRegistration> {
 
 	private KubernetesDiscoveryProperties properties;
+	private KubernetesRegistrationProperties registrationProperties;
 	private KubernetesRegistration registration;
 	private PodUtils podUtils;
 
 	KubernetesAutoServiceRegistration(ServiceRegistry<KubernetesRegistration> serviceRegistry,
 			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
 			KubernetesRegistration registration, KubernetesDiscoveryProperties properties,
-			PodUtils podUtils) {
+			KubernetesRegistrationProperties registrationProperties, PodUtils podUtils) {
 		super(serviceRegistry, autoServiceRegistrationProperties);
 		this.properties = properties;
+		this.registrationProperties = registrationProperties;
 		this.registration = registration;
 		this.podUtils = podUtils;
 	}
 
 	public void setRegistration(int port) throws UnknownHostException {
-		String ip = InetAddress.getLocalHost().getHostAddress();
+		String ip = registrationProperties.getIpAddress() != null ? registrationProperties.getIpAddress() : InetAddress.getLocalHost().getHostAddress();
 		registration.setHost(ip);
 		registration.setPort(port);
 		registration.setServiceId(getAppName(properties, getContext().getEnvironment()) + "." + getNamespace(getContext().getEnvironment()));
