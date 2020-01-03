@@ -15,39 +15,38 @@ import org.springframework.context.annotation.Configuration;
 import java.net.UnknownHostException;
 
 @Configuration
-//@ConditionalOnBean(AutoServiceRegistrationProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.kubernetes.discovery.register", havingValue = "true")
-@AutoConfigureAfter({ AutoServiceRegistrationConfiguration.class, KubernetesServiceRegistryAutoConfiguration.class })
+@AutoConfigureAfter({AutoServiceRegistrationConfiguration.class, KubernetesServiceRegistryAutoConfiguration.class})
 public class KubernetesAutoServiceRegistrationAutoConfiguration {
 
-	@Autowired
-	AutoServiceRegistrationProperties autoServiceRegistrationProperties;
+    @Autowired
+    AutoServiceRegistrationProperties autoServiceRegistrationProperties;
 
-	@Bean
-	@ConditionalOnMissingBean
-	public KubernetesAutoServiceRegistration autoServiceRegistration(
-			@Qualifier("serviceRegistry") KubernetesServiceRegistry registry,
-			AutoServiceRegistrationProperties autoServiceRegistrationProperties,
-			KubernetesDiscoveryProperties properties,
-			KubernetesRegistrationProperties registrationProperties,
-			KubernetesRegistration registration, PodUtils podUtils) {
-		return new KubernetesAutoServiceRegistration(registry,
-				autoServiceRegistrationProperties, registration, properties, registrationProperties, podUtils);
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public KubernetesAutoServiceRegistration autoServiceRegistration(
+            @Qualifier("serviceRegistry") KubernetesServiceRegistry registry,
+            AutoServiceRegistrationProperties autoServiceRegistrationProperties,
+            KubernetesDiscoveryProperties properties,
+            KubernetesRegistrationProperties registrationProperties,
+            KubernetesRegistration registration, PodUtils podUtils) {
+        return new KubernetesAutoServiceRegistration(registry,
+                autoServiceRegistrationProperties, registration, properties, registrationProperties, podUtils);
+    }
 
-	@Bean
-	public KubernetesAutoServiceRegistrationListener listener(KubernetesAutoServiceRegistration registration) {
-		return new KubernetesAutoServiceRegistrationListener(registration);
-	}
+    @Bean
+    public KubernetesAutoServiceRegistrationListener listener(KubernetesAutoServiceRegistration registration) {
+        return new KubernetesAutoServiceRegistrationListener(registration);
+    }
 
-	@Bean
-	public KubernetesRegistration registration(KubernetesDiscoveryProperties properties) throws UnknownHostException {
-		return new KubernetesRegistration(properties);
-	}
+    @Bean
+    public KubernetesRegistration registration(KubernetesDiscoveryProperties properties) throws UnknownHostException {
+        return new KubernetesRegistration(properties);
+    }
 
-	@Bean
-	public KubernetesRegistrationProperties kubernetesRegistrationProperties() {
-		return new KubernetesRegistrationProperties();
-	}
+    @Bean
+    public KubernetesRegistrationProperties kubernetesRegistrationProperties() {
+        return new KubernetesRegistrationProperties();
+    }
 
 }

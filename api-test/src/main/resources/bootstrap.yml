@@ -3,6 +3,7 @@ spring:
   cloud:
     kubernetes:
       discovery:
+        ipAddress: 192.168.99.1
         register: true
       client:
         masterUrl: 192.168.99.100:8443

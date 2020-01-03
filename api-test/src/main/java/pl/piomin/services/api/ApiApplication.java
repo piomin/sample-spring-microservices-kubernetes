@@ -2,6 +2,7 @@ package pl.piomin.services.api;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 
 import javax.annotation.PostConstruct;
@@ -16,8 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.kubernetes.PodUtils;
-import org.springframework.cloud.kubernetes.discovery.ext.KubernetesRegistration;
+//import org.springframework.cloud.kubernetes.discovery.ext.KubernetesRegistration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -34,16 +37,23 @@ public class ApiApplication {
 	@Autowired
 	KubernetesClient client;
 	@Autowired
+	DiscoveryClient discoveryClient;
+	@Autowired
 	PodUtils utils;
 
 	@PostConstruct
 	public void init() {
 		try {
-			Endpoints e = client.endpoints().inNamespace("external").withName("api-test").get();
+			Endpoints e = client.endpoints().inNamespace("external").withName("employee").get();
+			LOGGER.info("E: {}", e);
 			printEndpoints(e);
 		} catch (Exception e) {
 
 		}
+
+		LOGGER.info("Services: {}", discoveryClient.getServices());
+		Stream<ServiceInstance> s = discoveryClient.getServices().stream().flatMap(it -> discoveryClient.getInstances(it).stream());
+		s.forEach(it -> LOGGER.info("Instance: url={}:{}, id={}, service={}", it.getHost(), it.getPort(), it.getInstanceId(), it.getServiceId()));
 
 //		EndpointsList el = client.endpoints().inAnyNamespace().list();
 //		Stream<Endpoints> s = el.getItems().stream().filter(endpoint -> endpoint.getMetadata().getName().equals("api-test"));
@@ -105,36 +115,36 @@ public class ApiApplication {
 		return false;
 	}
 
-	@Autowired
-    KubernetesRegistration registration;
+//	@Autowired
+//    KubernetesRegistration registration;
 
-	@Scheduled(fixedDelay = 10000)
-	public void update() {
-		if (registration.getMetadata().isEmpty())
-			return;
-		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
-				.inNamespace(registration.getMetadata().get("namespace"))
-				.withName(registration.getMetadata().get("name"));
-		Endpoints endpoints = resource.get();
-
-		LOGGER.info("Updating: {}", endpoints);
-		Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).getPort().equals(registration.getPort())).findFirst();
-		optSubset.ifPresent(subset -> {
-			final int index = endpoints.getSubsets().indexOf(subset);
-			subset.getAddresses().stream()
-					.filter(address -> address.getIp().equals(registration.getHost()))
-					.map(address -> {
-						address.setAdditionalProperty("lastUpdated", System.currentTimeMillis());
-						return address;
-					})
-					.findAny().ifPresent(address -> {
-						int i = subset.getAddresses().indexOf(address);
-						subset.getAddresses().set(i, address);
-						endpoints.getSubsets().set(index, subset);
-						LOGGER.info("Endpoint updated: {}", endpoints);
-						client.endpoints().createOrReplace(endpoints);
-					});
-		});
-	}
+//	@Scheduled(fixedDelay = 10000)
+//	public void update() {
+//		if (registration.getMetadata().isEmpty())
+//			return;
+//		Resource<Endpoints, DoneableEndpoints> resource = client.endpoints()
+//				.inNamespace(registration.getMetadata().get("namespace"))
+//				.withName(registration.getMetadata().get("name"));
+//		Endpoints endpoints = resource.get();
+//
+//		LOGGER.info("Updating: {}", endpoints);
+//		Optional<EndpointSubset> optSubset = endpoints.getSubsets().stream().filter(s -> s.getPorts().get(0).getPort().equals(registration.getPort())).findFirst();
+//		optSubset.ifPresent(subset -> {
+//			final int index = endpoints.getSubsets().indexOf(subset);
+//			subset.getAddresses().stream()
+//					.filter(address -> address.getIp().equals(registration.getHost()))
+//					.map(address -> {
+//						address.setAdditionalProperty("lastUpdated", System.currentTimeMillis());
+//						return address;
+//					})
+//					.findAny().ifPresent(address -> {
+//						int i = subset.getAddresses().indexOf(address);
+//						subset.getAddresses().set(i, address);
+//						endpoints.getSubsets().set(index, subset);
+//						LOGGER.info("Endpoint updated: {}", endpoints);
+//						client.endpoints().createOrReplace(endpoints);
+//					});
+//		});
+//	}
 
 }

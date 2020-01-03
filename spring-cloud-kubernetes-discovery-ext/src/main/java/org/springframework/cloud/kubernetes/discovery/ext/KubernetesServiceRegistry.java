@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.serviceregistry.ServiceRegistry;
 import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryProperties;
 
+import java.util.Collections;
+
 public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegistration> {
 
     private static final Logger LOG = LoggerFactory.getLogger(KubernetesServiceRegistry.class);
@@ -29,7 +31,18 @@ public class KubernetesServiceRegistry implements ServiceRegistry<KubernetesRegi
         Endpoints endpoints = resource.get();
         if (endpoints == null) {
             Endpoints e = client.endpoints().create(create(registration));
-            LOG.info("New endpoint: {}",e);
+            LOG.info("New endpoint: {}", e);
+            Service s = client.services().createNew()
+                    .withMetadata(new ObjectMetaBuilder()
+                            .withName(registration.getMetadata().get("name"))
+                            .withLabels(Collections.singletonMap("app", registration.getMetadata().get("name")))
+                            .build())
+                    .withSpec(new ServiceSpecBuilder()
+                            .withPorts(new ServicePortBuilder().withProtocol("TCP").withPort(registration.getPort()).build())
+                            .withSelector(Collections.singletonMap("app", registration.getMetadata().get("name")))
+                            .build())
+                    .done();
+            LOG.info("New service: {}", s);
         } else {
             try {
                 Endpoints updatedEndpoints = resource.edit()
