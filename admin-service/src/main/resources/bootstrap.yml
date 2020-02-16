@@ -1,0 +1,3 @@
+spring:
+  applicaton:
+    name: admin

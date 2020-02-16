@@ -1,0 +1,10 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+metadata:
+  name: admin-service
+build:
+  artifacts:
+    - image: piomin/admin
+      jib: {}
+  tagPolicy:
+    gitCommit: {}
