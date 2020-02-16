@@ -1,22 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb
+data:
+  database-name: admin
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb
+type: Opaque
+data:
+  database-password: UGlvdF8xMjM=
+  database-user: cGlvdHI=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: employee
+  name: organization
   labels:
-    app: employee
+    app: organization
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: employee
+      app: organization
   template:
     metadata:
       labels:
-        app: employee
+        app: organization
     spec:
       containers:
-      - name: employee
-        image: piomin/employee:1.0
+      - name: organization
+        image: piomin/organization:1.0
         ports:
         - containerPort: 8080
         env:
@@ -39,13 +55,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: employee
+  name: organization
   labels:
-    app: employee
+    app: organization
+    spring-boot: "true"
 spec:
   ports:
   - port: 8080
     protocol: TCP
   selector:
-    app: employee
-  type: NodePort
+    app: organization

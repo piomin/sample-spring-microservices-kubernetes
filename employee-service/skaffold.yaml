@@ -4,8 +4,7 @@ metadata:
   name: employee-service
 build:
   artifacts:
-  - image: piomin/employee
-deploy:
-  kubectl:
-    manifests:
-    - kubernetes\deployment.yaml
+    - image: piomin/employee
+      jib: {}
+  tagPolicy:
+    gitCommit: {}

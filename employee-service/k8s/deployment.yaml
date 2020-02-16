@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: organization
+  name: employee
   labels:
-    app: organization
+    app: employee
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: organization
+      app: employee
   template:
     metadata:
       labels:
-        app: organization
+        app: employee
     spec:
       containers:
-      - name: organization
-        image: piomin/organization:1.0
+      - name: employee
+        image: piomin/employee:1.0
         ports:
         - containerPort: 8080
         env:
@@ -39,12 +39,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: organization
+  name: employee
   labels:
-    app: organization
+    app: employee
+    spring-boot: "true"
 spec:
   ports:
   - port: 8080
     protocol: TCP
   selector:
-    app: organization
+    app: employee
+  type: NodePort

@@ -4,8 +4,7 @@ metadata:
   name: department-service
 build:
   artifacts:
-  - image: piomin/department
-deploy:
-  kubectl:
-    manifests:
-    - kubernetes\deployment.yaml
+    - image: piomin/department
+      jib: {}
+  tagPolicy:
+    gitCommit: {}
