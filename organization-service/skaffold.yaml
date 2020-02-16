@@ -4,7 +4,7 @@ metadata:
   name: organization-service
 build:
   artifacts:
-    - image: piomin/employee
+    - image: piomin/organization
       jib: {}
   tagPolicy:
     gitCommit: {}
