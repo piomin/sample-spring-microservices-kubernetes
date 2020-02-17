@@ -5,5 +5,5 @@ spring:
     kubernetes:
       discovery:
         all-namespaces: true
-        serviceLabels:
+        service-labels:
           spring-boot: true

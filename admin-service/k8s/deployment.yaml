@@ -28,7 +28,7 @@ data:
       kubernetes:
         discovery:
           all-namespaces: true
-          serviceLabels:
+          service-labels:
             spring-boot: true
 ---
 apiVersion: v1
