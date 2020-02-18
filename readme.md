@@ -7,6 +7,7 @@ In this project I'm demonstrating you the most interesting features of [Spring C
 Currently you may find here some examples of microservices implementation using different projects from Spring Cloud. All the examples are divided into the branches and described in a separated articles on my blog. Here's a full list of available examples:
 1. Using Spring Boot and Spring Cloud for building microservices that may be easily deployed on Kubernetes. The example is available in the branch [master](https://github.com/piomin/sample-spring-microservices-kubernetes/tree/master). A detailed guide may be find in the following article: Detailed description can be found here: [Quick Guide to Microservices with Kubernetes, Spring Boot 2.0 and Docker](https://piotrminkowski.com/2018/08/02/quick-guide-to-microservices-with-kubernetes-spring-boot-2-0-and-docker/) 
 2. An introduction to Spring Cloud Kubernetes project, that shows its the most interesting features like discovery across many namespaces or Spring Boot property sources based on ConfigMap and Secret. The example is available in the branch [hybrid](https://github.com/piomin/sample-spring-microservices-kubernetes/tree/hybrid). A detailed guide may be find in the following article: Detailed description can be found here: [Microservices with Spring Cloud Kubernetes](https://piotrminkowski.com/2019/12/20/microservices-with-spring-cloud-kubernetes/)
+3. Using Spring Boot Admin to monitor Spring Boot applications running on Kubernetes. The example is available in the branch [master](https://github.com/piomin/sample-spring-microservices-kubernetes/tree/master). A detailed guide may be find in the following article: [Spring Boot Admin on Kubernetes](https://piotrminkowski.com/2020/02/18/spring-boot-admin-on-kubernetes/)
 
 ### Usage
 1. Download and run **Minikube** using command: `minikube start --vm-driver=virtualbox --memory='4000mb'` 
@@ -23,7 +24,7 @@ Our sample microservices-based system consists of the following modules:
 - **employee-service** - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
 - **department-service** - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service. 
 - **organization-service** - a module containing the third of our sample microservices that allows to perform CRUD operation on Mongo repository of organizations. It communicates with both employee-service and organization-service.
-
+- **admin-service** - a module containing embedded Spring Boot Admin Server used for monitoring Spring Boot microservices running on Kubernetes
 The following picture illustrates the architecture described above including Kubernetes objects.
 
 <img src="https://piotrminkowski.files.wordpress.com/2018/07/micro-kube-1.png" title="Architecture1">
