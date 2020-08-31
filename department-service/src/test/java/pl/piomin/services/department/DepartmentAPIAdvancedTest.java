@@ -66,6 +66,7 @@ public class DepartmentAPIAdvancedTest {
         Department[] departments =
                 restTemplate.getForObject("/organization/{organizationId}/with-employees", Department[].class, 1L);
         Assertions.assertEquals(1, departments.length);
+        Assertions.assertEquals(1, departments[0].getEmployees().size());
     }
 
     private static ConfigMap buildConfigMap() {
