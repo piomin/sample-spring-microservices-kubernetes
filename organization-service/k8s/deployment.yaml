@@ -21,7 +21,7 @@ metadata:
   labels:
     app: organization
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: organization
@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: organization
-        image: piomin/organization:1.0
+        image: piomin/organization
         ports:
         - containerPort: 8080
         env:

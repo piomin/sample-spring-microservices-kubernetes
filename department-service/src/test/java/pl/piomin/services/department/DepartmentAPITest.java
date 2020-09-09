@@ -39,7 +39,7 @@ public class DepartmentAPITest {
 
     @Test
     void addDepartmentTest() {
-        Department department = new Department(1L, "Test");
+        Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
         Assertions.assertNotNull(department);
         Assertions.assertNotNull(department.getId());
@@ -47,7 +47,7 @@ public class DepartmentAPITest {
 
     @Test
     void addAndThenFindDepartmentByIdTest() {
-        Department department = new Department(2L, "Test2");
+        Department department = new Department("2", "Test2");
         department = restTemplate.postForObject("/", department, Department.class);
         Assertions.assertNotNull(department);
         Assertions.assertNotNull(department.getId());

@@ -58,7 +58,7 @@ public class DepartmentAPIAdvancedTest {
 
     @Test
     void findByOrganizationWithEmployees(Hoverfly hoverfly) {
-        Department department = new Department(1L, "Test");
+        Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
         Assertions.assertNotNull(department);
         Assertions.assertNotNull(department.getId());

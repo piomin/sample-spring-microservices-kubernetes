@@ -41,7 +41,7 @@ class EmployeeAPITest {
 
     @Test
     void addEmployeeTest() {
-        Employee employee = new Employee(1L, 1L, "Test", 30, "test");
+        Employee employee = new Employee("1", "1", "Test", 30, "test");
         employee = restTemplate.postForObject("/", employee, Employee.class);
         Assertions.assertNotNull(employee);
         Assertions.assertNotNull(employee.getId());
@@ -49,7 +49,7 @@ class EmployeeAPITest {
 
     @Test
     void addAndThenFindEmployeeByIdTest() {
-        Employee employee = new Employee(1L, 2L, "Test2", 20, "test2");
+        Employee employee = new Employee("1", "2", "Test2", 20, "test2");
         employee = restTemplate.postForObject("/", employee, Employee.class);
         Assertions.assertNotNull(employee);
         Assertions.assertNotNull(employee.getId());

@@ -4,7 +4,14 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb.default/${MONGO_DATABASE}
-      
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    kubernetes:
+      discovery:
+        all-namespaces: true
+
 logging:
   pattern: 
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
