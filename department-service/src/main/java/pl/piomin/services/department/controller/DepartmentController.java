@@ -11,7 +11,6 @@ import pl.piomin.services.department.model.Employee;
 import pl.piomin.services.department.repository.DepartmentRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class DepartmentController {
@@ -49,28 +48,20 @@ public class DepartmentController {
     @GetMapping("/{id}/with-employees")
     public Department findByIdWithEmployees(@PathVariable("id") String id) {
         LOGGER.info("Department findByIdWithEmployees: id={}", id);
-        Optional<Department> optDepartment = repository.findById(id);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            department.setEmployees(employeeClient.findByDepartment(department.getId()));
-            return department;
-        }
-        return null;
+        Department department = repository.findById(id).orElseThrow();
+        department.setEmployees(employeeClient.findByDepartment(department.getId()));
+        return department;
     }
 
     @GetMapping("/{id}/with-employees-and-delay")
     public Department findByIdWithEmployeesAndDelay(@PathVariable("id") String id) {
         LOGGER.info("Department findByIdWithEmployees: id={}", id);
-        Optional<Department> optDepartment = repository.findById(id);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            Resilience4JCircuitBreaker circuitBreaker = circuitBreakerFactory.create("delayed-circuit");
-            List<Employee> employees = circuitBreaker.run(() ->
-                    employeeClient.findByDepartmentWithDelay(department.getId()));
-            department.setEmployees(employees);
-            return department;
-        }
-        return null;
+        Department department = repository.findById(id).orElseThrow();
+        Resilience4JCircuitBreaker circuitBreaker = circuitBreakerFactory.create("delayed-circuit");
+        List<Employee> employees = circuitBreaker.run(() ->
+                employeeClient.findByDepartmentWithDelay(department.getId()));
+        department.setEmployees(employees);
+        return department;
     }
 
     @GetMapping("/")

@@ -13,7 +13,6 @@ import pl.piomin.services.department.repository.DepartmentRepository;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class DepartmentWithRestTemplateController {
 
@@ -43,13 +42,9 @@ public class DepartmentWithRestTemplateController {
     @GetMapping("/{id}/with-employees")
     public Department findByIdWithEmployees(@PathVariable("id") String id) {
         LOGGER.info("Department findByIdWithEmployees: id={}", id);
-        Optional<Department> optDepartment = repository.findById(id);
-        if (optDepartment.isPresent()) {
-            Department department = optDepartment.get();
-            department.setEmployees(findEmployeesByDepartment(department.getId()));
-            return department;
-        }
-        return null;
+        Department department = repository.findById(id).orElseThrow();
+        department.setEmployees(findEmployeesByDepartment(department.getId()));
+        return department;
     }
 
     @GetMapping("/")
