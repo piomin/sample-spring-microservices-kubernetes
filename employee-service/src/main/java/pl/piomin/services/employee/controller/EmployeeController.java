@@ -31,7 +31,7 @@ public class EmployeeController {
 	@GetMapping("/{id}")
 	public Employee findById(@PathVariable("id") String id) {
 		LOGGER.info("Employee find: id={}", id);
-		return repository.findById(id).get();
+		return repository.findById(id).orElseThrow();
 	}
 	
 	@GetMapping("/")
