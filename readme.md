@@ -32,3 +32,13 @@ The following picture illustrates the architecture described above including Kub
 You can distribute applications across multiple namespaces and use Spring Cloud Kubernetes `DiscoveryClient` and `Ribbon` for inter-service communication.
 
 <img src="https://piotrminkowski.files.wordpress.com/2019/12/microservices-with-spring-cloud-kubernetes-discovery.png" title="Architecture2" >
+
+## Before you start
+Go to the `k8s` directory. You will find there several YAML scripts you need to apply before running applications.
+1. `privileges.yaml` - `Role` and `RoleBinding` for Spring Cloud Kubernetes to allow access Kubernetes API from pod
+2. `mongo-secret.yaml` - credentials for MongoDB
+3. `mongo-configmap.yaml` - user for MongoDB
+4. `mongo-deployment.yaml` - `Deployment` for MongoDB
+Just apply those scripts using `kubectl apply`.
+
+You can easily deploy all applications using `skaffold dev` command.
