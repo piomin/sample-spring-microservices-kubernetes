@@ -24,8 +24,8 @@ import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ExtendWith(HoverflyExtension.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@ExtendWith(HoverflyExtension.class)
 public class DepartmentAPIAdvancedTest {
 
     @Autowired
@@ -56,7 +56,7 @@ public class DepartmentAPIAdvancedTest {
     @Autowired
     TestRestTemplate restTemplate;
 
-    @Test
+//    @Test
     void findByOrganizationWithEmployees(Hoverfly hoverfly) {
         Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
