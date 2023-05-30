@@ -7,19 +7,36 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.services.department.model.Department;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "spring.cloud.kubernetes.discovery.enabled=false",
+                "spring.cloud.kubernetes.config.enabled=false"})
+@Testcontainers
 //@EnableKubernetesMockClient(crud = true)
-//@TestMethodOrder(MethodOrderer.Alphanumeric.class)
+@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class DepartmentAPITest {
+
+    @Container
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
+
+    @DynamicPropertySource
+    static void registerMongoProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
+    }
 
     static KubernetesClient client;
 
     @Autowired
     TestRestTemplate restTemplate;
 
-    @BeforeAll
+//    @BeforeAll
     static void init() {
         System.setProperty(Config.KUBERNETES_MASTER_SYSTEM_PROPERTY,
                 client.getConfiguration().getMasterUrl());
@@ -37,7 +54,7 @@ public class DepartmentAPITest {
                 .done();
     }
 
-//    @Test
+    @Test
     void addDepartmentTest() {
         Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
@@ -45,7 +62,7 @@ public class DepartmentAPITest {
         Assertions.assertNotNull(department.getId());
     }
 
-//    @Test
+    @Test
     void addAndThenFindDepartmentByIdTest() {
         Department department = new Department("2", "Test2");
         department = restTemplate.postForObject("/", department, Department.class);
@@ -56,13 +73,13 @@ public class DepartmentAPITest {
         Assertions.assertNotNull(department.getId());
     }
 
-//    @Test
+    @Test
     void findAllDepartmentsTest() {
         Department[] departments = restTemplate.getForObject("/", Department[].class);
         Assertions.assertEquals(2, departments.length);
     }
 
-//    @Test
+    @Test
     void findDepartmentsByOrganizationTest() {
         Department[] departments = restTemplate.getForObject("/organization/1", Department[].class);
         Assertions.assertEquals(1, departments.length);

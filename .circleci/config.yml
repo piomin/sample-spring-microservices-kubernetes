@@ -15,7 +15,7 @@ orbs:
   tcc: atomicjar/testcontainers-cloud-orb@0.1.0
 
 executors:
-  j17:
+  jdk:
     docker:
       - image: 'cimg/openjdk:17.0'
 
@@ -23,7 +23,7 @@ workflows:
   maven_test:
     jobs:
       - maven/test:
-          executor: j17
+          executor: jdk
           context: Testcontainers
           pre-steps:
             - tcc/setup

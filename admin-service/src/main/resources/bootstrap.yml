@@ -1,5 +1,5 @@
 spring:
-  applicaton:
+  application:
     name: admin
   cloud:
     kubernetes:
