@@ -11,7 +11,7 @@ jobs:
           command: mvn verify sonar:sonar -DskipTests
 
 orbs:
-  maven: circleci/maven@1.4.0
+  maven: circleci/maven@1.4.1
   tcc: atomicjar/testcontainers-cloud-orb@0.1.0
 
 executors:
