@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   analyze:
     docker:
-      - image: 'cimg/openjdk:17.0'
+      - image: 'cimg/openjdk:20.0'
     steps:
       - checkout
       - run:
@@ -17,7 +17,7 @@ orbs:
 executors:
   jdk:
     docker:
-      - image: 'cimg/openjdk:17.0'
+      - image: 'cimg/openjdk:20.0'
 
 workflows:
   maven_test:
