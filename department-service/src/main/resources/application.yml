@@ -5,6 +5,8 @@ spring:
     mongodb:
       uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb.default/${MONGO_DATABASE}
   cloud:
+    bootstrap:
+      enabled: true
     loadbalancer:
       ribbon:
         enabled: false
@@ -15,6 +17,8 @@ spring:
 logging:
   pattern: 
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    org.springframework.cloud.kubernetes: TRACE
 
 management:
   endpoints:

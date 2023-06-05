@@ -1,8 +1,9 @@
 package pl.piomin.services.department;
 
-import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.KubernetesClient;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,7 +19,6 @@ import pl.piomin.services.department.model.Department;
                 "spring.cloud.kubernetes.discovery.enabled=false",
                 "spring.cloud.kubernetes.config.enabled=false"})
 @Testcontainers
-//@EnableKubernetesMockClient(crud = true)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
 public class DepartmentAPITest {
 
@@ -30,28 +30,8 @@ public class DepartmentAPITest {
         registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
     }
 
-    static KubernetesClient client;
-
     @Autowired
     TestRestTemplate restTemplate;
-
-//    @BeforeAll
-    static void init() {
-        System.setProperty(Config.KUBERNETES_MASTER_SYSTEM_PROPERTY,
-                client.getConfiguration().getMasterUrl());
-        System.setProperty(Config.KUBERNETES_TRUST_CERT_SYSTEM_PROPERTY, "true");
-        System.setProperty(Config.KUBERNETES_AUTH_TRYKUBECONFIG_SYSTEM_PROPERTY,
-                "false");
-        System.setProperty(Config.KUBERNETES_AUTH_TRYSERVICEACCOUNT_SYSTEM_PROPERTY,
-                "false");
-        System.setProperty(Config.KUBERNETES_HTTP2_DISABLE, "true");
-        System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
-//        client.configMaps().inNamespace("default").create()
-//                .withNewMetadata().withName("department").endMetadata()
-//                .addToData("application.properties",
-//                        "spring.data.mongodb.uri=mongodb://localhost:27017/test")
-//                .done();
-    }
 
     @Test
     void addDepartmentTest() {

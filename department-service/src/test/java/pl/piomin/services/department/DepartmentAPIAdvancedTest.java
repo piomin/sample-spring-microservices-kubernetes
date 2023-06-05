@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -30,7 +31,10 @@ import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {
+        "spring.main.cloud-platform=KUBERNETES",
+        "spring.cloud.bootstrap.enabled=true"})
 @ExtendWith(HoverflyExtension.class)
 @EnableKubernetesMockClient(crud = true)
 @Testcontainers
@@ -38,12 +42,10 @@ public class DepartmentAPIAdvancedTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(DepartmentAPIAdvancedTest.class);
 
-    @Autowired
-    KubernetesClient cc;
     static KubernetesClient client;
 
     @Container
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
 
     @BeforeAll
     static void setup() {
