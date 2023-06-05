@@ -2,7 +2,6 @@ package pl.piomin.services.department;
 
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.server.mock.EnableKubernetesMockClient;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,11 +46,11 @@ public class DepartmentAPITest {
                 "false");
         System.setProperty(Config.KUBERNETES_HTTP2_DISABLE, "true");
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
-        client.configMaps().inNamespace("default").createNew()
-                .withNewMetadata().withName("department").endMetadata()
-                .addToData("application.properties",
-                        "spring.data.mongodb.uri=mongodb://localhost:27017/test")
-                .done();
+//        client.configMaps().inNamespace("default").create()
+//                .withNewMetadata().withName("department").endMetadata()
+//                .addToData("application.properties",
+//                        "spring.data.mongodb.uri=mongodb://localhost:27017/test")
+//                .done();
     }
 
     @Test
