@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>20</java.version>
         <springdoc.version>1.5.11</springdoc.version>
         <spring-cloud.version>2020.0.6</spring-cloud.version>
         <testcontainers.version>1.18.3</testcontainers.version>
