@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreaker;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.web.bind.annotation.*;
 import pl.piomin.services.department.client.EmployeeClient;
 import pl.piomin.services.department.model.Department;
@@ -57,7 +58,7 @@ public class DepartmentController {
     public Department findByIdWithEmployeesAndDelay(@PathVariable("id") String id) {
         LOGGER.info("Department findByIdWithEmployees: id={}", id);
         Department department = repository.findById(id).orElseThrow();
-        Resilience4JCircuitBreaker circuitBreaker = circuitBreakerFactory.create("delayed-circuit");
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("delayed-circuit");
         List<Employee> employees = circuitBreaker.run(() ->
                 employeeClient.findByDepartmentWithDelay(department.getId()));
         department.setEmployees(employees);
