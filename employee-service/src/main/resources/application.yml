@@ -1,6 +1,9 @@
 spring:
   application:
     name: employee
+  cloud:
+    bootstrap:
+      enabled: true
   data:
     mongodb:
       uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb.default/${MONGO_DATABASE}

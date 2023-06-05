@@ -1,6 +1,9 @@
 spring:
   application:
     name: organization
+  cloud:
+    bootstrap:
+      enabled: true
   data:
     mongodb:
       uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb.default/${MONGO_DATABASE}

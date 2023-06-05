@@ -2,6 +2,8 @@ spring:
   application:
     name: gateway
   cloud:
+    bootstrap:
+      enabled: true
     loadbalancer:
       ribbon:
         enabled: false
