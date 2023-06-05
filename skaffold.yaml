@@ -1,0 +1,33 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: employee-service
+build:
+  artifacts:
+    - image: piomin/admin
+      jib:
+        project: admin-service
+    - image: piomin/department
+      jib:
+        project: department-service
+    - image: piomin/employee
+      jib:
+        project: employee-service
+    - image: piomin/gateway
+      jib:
+        project: gateway-service
+    - image: piomin/organization
+      jib:
+        project: organization-service
+  tagPolicy:
+    gitCommit: {}
+manifests:
+  rawYaml:
+    - k8s/*.yaml
+    - admin-service/k8s/*.yaml
+    - department-service/k8s/*.yaml
+    - employee-service/k8s/*.yaml
+    - gateway-service/k8s/*.yaml
+    - organization-service/k8s/*.yaml
+deploy:
+  kubectl: {}
