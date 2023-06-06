@@ -10,20 +10,28 @@ build:
     - image: piomin/department
       jib:
         project: department-service
+        args:
+          - -DskipTests
     - image: piomin/employee
       jib:
         project: employee-service
+        args:
+          - -DskipTests
     - image: piomin/gateway
       jib:
         project: gateway-service
     - image: piomin/organization
       jib:
         project: organization-service
+        args:
+          - -DskipTests
   tagPolicy:
     gitCommit: {}
 manifests:
   rawYaml:
-    - k8s/*.yaml
+    - k8s/mongodb-*.yaml
+#    - k8s/ingress.yaml
+    - k8s/privileges.yaml
     - admin-service/k8s/*.yaml
     - department-service/k8s/*.yaml
     - employee-service/k8s/*.yaml

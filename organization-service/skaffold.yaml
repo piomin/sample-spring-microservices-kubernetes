@@ -1,10 +1,16 @@
-apiVersion: skaffold/v2beta22
+apiVersion: skaffold/v4beta5
 kind: Config
 metadata:
   name: organization-service
 build:
   artifacts:
     - image: piomin/organization
-      jib: {}
+      jib:
+        args:
+          - -DskipTests
   tagPolicy:
     gitCommit: {}
+manifests:
+  rawYaml:
+    - ../k8s/privileges.yaml
+    - k8s/**.yaml

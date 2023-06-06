@@ -14,38 +14,14 @@ spec:
       labels:
         app: department
     spec:
+      serviceAccountName: spring-cloud-kubernetes
       containers:
       - name: department
-        image: piomin/department:1.0
+        image: piomin/department
         ports:
         - containerPort: 8080
         env:
-        - name: MONGO_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: mongodb
-              key: database-name
-        - name: MONGO_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongodb
-              key: database-user
-        - name: MONGO_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongodb
-              key: database-password
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: department
-  labels:
-    app: department
-    spring-boot: "true"
-spec:
-  ports:
-  - port: 8080
-    protocol: TCP
-  selector:
-    app: department
+          - name: SPRING_CLOUD_BOOTSTRAP_ENABLED
+            value: "true"
+          - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLEAPI
+            value: "true"

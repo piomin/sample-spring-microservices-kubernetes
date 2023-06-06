@@ -1,12 +1,7 @@
 spring:
   application:
     name: department
-  data:
-    mongodb:
-      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb.default/${MONGO_DATABASE}
   cloud:
-    bootstrap:
-      enabled: true
     loadbalancer:
       ribbon:
         enabled: false

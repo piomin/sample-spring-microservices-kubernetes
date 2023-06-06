@@ -11,34 +11,12 @@ spec:
       labels:
         app: admin
     spec:
+      serviceAccountName: spring-cloud-admin
       containers:
       - name: admin
         image: piomin/admin
         ports:
         - containerPort: 8080
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: admin
-data:
-  application.yml: |-
-    spring:
-     cloud:
-      kubernetes:
-        discovery:
-          all-namespaces: true
-          service-labels:
-            spring-boot: true
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: admin
-spec:
-  type: NodePort
-  selector:
-    app: admin
-  ports:
-  - port: 8080
-    targetPort: 8080
+        env:
+          - name: SPRING_CLOUD_BOOTSTRAP_ENABLED
+            value: "true"

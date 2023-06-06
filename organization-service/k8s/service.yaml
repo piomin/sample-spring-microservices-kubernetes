@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: organization
+  labels:
+    app: organization
+    spring-boot: "true"
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    app: organization
+  type: ClusterIP
