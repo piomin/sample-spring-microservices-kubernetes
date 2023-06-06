@@ -30,6 +30,8 @@ import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
@@ -87,16 +89,16 @@ public class DepartmentAPIAdvancedTest {
     void addDepartmentTest() {
         Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
-        Assertions.assertNotNull(department);
-        Assertions.assertNotNull(department.getId());
+        assertNotNull(department);
+        assertNotNull(department.getId());
     }
 
     @Test
     void findByOrganizationWithEmployees(Hoverfly hoverfly) {
         Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
-        Assertions.assertNotNull(department);
-        Assertions.assertNotNull(department.getId());
+        assertNotNull(department);
+        assertNotNull(department.getId());
 
         hoverfly.simulate(
             dsl(service("employee.default:8080")
@@ -105,8 +107,8 @@ public class DepartmentAPIAdvancedTest {
 
         Department[] departments = restTemplate
             .getForObject("/organization/{organizationId}/with-employees", Department[].class, 1L);
-        Assertions.assertEquals(1, departments.length);
-        Assertions.assertEquals(1, departments[0].getEmployees().size());
+        assertEquals(1, departments.length);
+        assertEquals(1, departments[0].getEmployees().size());
     }
 
     private static Service buildService() {

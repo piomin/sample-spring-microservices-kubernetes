@@ -14,6 +14,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.services.department.model.Department;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
                 "spring.cloud.kubernetes.discovery.enabled=false",
@@ -37,31 +40,31 @@ public class DepartmentAPITest {
     void addDepartmentTest() {
         Department department = new Department("1", "Test");
         department = restTemplate.postForObject("/", department, Department.class);
-        Assertions.assertNotNull(department);
-        Assertions.assertNotNull(department.getId());
+        assertNotNull(department);
+        assertNotNull(department.getId());
     }
 
     @Test
     void addAndThenFindDepartmentByIdTest() {
         Department department = new Department("2", "Test2");
         department = restTemplate.postForObject("/", department, Department.class);
-        Assertions.assertNotNull(department);
-        Assertions.assertNotNull(department.getId());
+        assertNotNull(department);
+        assertNotNull(department.getId());
         department = restTemplate.getForObject("/{id}", Department.class, department.getId());
-        Assertions.assertNotNull(department);
-        Assertions.assertNotNull(department.getId());
+        assertNotNull(department);
+        assertNotNull(department.getId());
     }
 
     @Test
     void findAllDepartmentsTest() {
         Department[] departments = restTemplate.getForObject("/", Department[].class);
-        Assertions.assertEquals(2, departments.length);
+        assertEquals(2, departments.length);
     }
 
     @Test
     void findDepartmentsByOrganizationTest() {
         Department[] departments = restTemplate.getForObject("/organization/1", Department[].class);
-        Assertions.assertEquals(1, departments.length);
+        assertEquals(1, departments.length);
     }
 
 }

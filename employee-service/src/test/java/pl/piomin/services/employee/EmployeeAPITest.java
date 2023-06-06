@@ -14,6 +14,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.piomin.services.employee.model.Employee;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
         "spring.cloud.kubernetes.discovery.enabled=false",
@@ -37,41 +40,41 @@ class EmployeeAPITest {
     void addEmployeeTest() {
         Employee employee = new Employee("1", "1", "Test", 30, "test");
         employee = restTemplate.postForObject("/", employee, Employee.class);
-        Assertions.assertNotNull(employee);
-        Assertions.assertNotNull(employee.getId());
+        assertNotNull(employee);
+        assertNotNull(employee.getId());
     }
 
     @Test
     void addAndThenFindEmployeeByIdTest() {
         Employee employee = new Employee("1", "2", "Test2", 20, "test2");
         employee = restTemplate.postForObject("/", employee, Employee.class);
-        Assertions.assertNotNull(employee);
-        Assertions.assertNotNull(employee.getId());
+        assertNotNull(employee);
+        assertNotNull(employee.getId());
         employee = restTemplate
             .getForObject("/{id}", Employee.class, employee.getId());
-        Assertions.assertNotNull(employee);
-        Assertions.assertNotNull(employee.getId());
+        assertNotNull(employee);
+        assertNotNull(employee.getId());
     }
 
     @Test
     void findAllEmployeesTest() {
         Employee[] employees =
             restTemplate.getForObject("/", Employee[].class);
-        Assertions.assertEquals(2, employees.length);
+        assertEquals(2, employees.length);
     }
 
     @Test
     void findEmployeesByDepartmentTest() {
         Employee[] employees =
             restTemplate.getForObject("/department/1", Employee[].class);
-        Assertions.assertEquals(1, employees.length);
+        assertEquals(1, employees.length);
     }
 
     @Test
     void findEmployeesByOrganizationTest() {
         Employee[] employees =
             restTemplate.getForObject("/organization/1", Employee[].class);
-        Assertions.assertEquals(2, employees.length);
+        assertEquals(2, employees.length);
     }
 
 }
