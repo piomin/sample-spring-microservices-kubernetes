@@ -59,15 +59,15 @@ public class DepartmentAPIAdvancedTest {
         System.setProperty(Config.KUBERNETES_HTTP2_DISABLE, "true");
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
 
-        ConfigMap cm = client.configMaps().inNamespace("default")
+        ConfigMap cm = client.configMaps()
                 .create(buildConfigMap(mongodb.getMappedPort(27017)));
         LOG.info("!!! {}", cm);
 
-        Service s = client.services().inNamespace("default")
+        Service s = client.services()
                 .create(buildService());
         LOG.info("!!! {}", s);
 
-        Endpoints e = client.endpoints().inNamespace("default")
+        Endpoints e = client.endpoints()
                 .create(buildEndpoints());
         LOG.info("!!! {}", e);
     }
@@ -78,7 +78,12 @@ public class DepartmentAPIAdvancedTest {
             .withName("department").withNamespace("default")
             .endMetadata()
             .addToData("application.properties",
-                "spring.data.mongodb.uri=mongodb://localhost:" + port + "/test")
+            """
+            spring.data.mongodb.host=localhost
+            spring.data.mongodb.port=%d
+            spring.data.mongodb.database=test
+            spring.data.mongodb.authentication-database=test
+            """.formatted(port))
             .build();
     }
 

@@ -11,10 +11,10 @@ import pl.piomin.services.organization.model.Department;
 @FeignClient(name = "department")
 public interface DepartmentClient {
 
-	@GetMapping("/organization/{organizationId}")
-	List<Department> findByOrganization(@PathVariable("organizationId") String organizationId);
-	
-	@GetMapping("/organization/{organizationId}/with-employees")
-	List<Department> findByOrganizationWithEmployees(@PathVariable("organizationId") String organizationId);
-	
+    @GetMapping("/organization/{organizationId}")
+    List<Department> findByOrganization(@PathVariable("organizationId") String organizationId);
+
+    @GetMapping("/organization/{organizationId}/with-employees")
+    List<Department> findByOrganizationWithEmployees(@PathVariable("organizationId") String organizationId);
+
 }

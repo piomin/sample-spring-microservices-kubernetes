@@ -1,0 +1,31 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gateway
+data:
+  application.yml: |-
+    spring:
+      cloud:
+        gateway:
+          discovery:
+            locator:
+              enabled: true
+          routes:
+            - id: employee
+              uri: lb://employee
+              predicates:
+                - Path=/employee/**
+              filters:
+                - RewritePath=/employee/(?<path>.*), /$\{path}
+            - id: department
+              uri: lb://department
+              predicates:
+                - Path=/department/**
+              filters:
+                - RewritePath=/department/(?<path>.*), /$\{path}
+            - id: organization
+              uri: lb://organization
+              predicates:
+                - Path=/organization/**
+              filters:
+                - RewritePath=/organization/(?<path>.*), /$\{path}

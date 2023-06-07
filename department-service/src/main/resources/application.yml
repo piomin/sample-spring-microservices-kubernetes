@@ -1,13 +1,13 @@
 spring:
   application:
     name: department
-  cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false
-    kubernetes:
-      discovery:
-        all-namespaces: true
+#  cloud:
+#    loadbalancer:
+#      ribbon:
+#        enabled: false
+#    kubernetes:
+#      discovery:
+#        all-namespaces: true
 
 logging:
   pattern: 
