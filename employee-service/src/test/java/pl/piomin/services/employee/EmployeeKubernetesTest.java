@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
                 "spring.cloud.bootstrap.enabled=true"})
 @Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext
 public class EmployeeKubernetesTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeKubernetesTest.class);
@@ -40,10 +42,6 @@ public class EmployeeKubernetesTest {
         Config config = Config.fromKubeconfig(k3s.getKubeConfigYaml());
         DefaultKubernetesClient client = new DefaultKubernetesClient(config);
 
-        ConfigMap cm = client.configMaps().inNamespace("default")
-                .create(buildConfigMap(mongodb.getMappedPort(27017)));
-        LOG.info("!!! {}", cm);
-
         System.setProperty(Config.KUBERNETES_MASTER_SYSTEM_PROPERTY, client.getConfiguration().getMasterUrl());
         System.setProperty(Config.KUBERNETES_CLIENT_CERTIFICATE_DATA_SYSTEM_PROPERTY,
                 client.getConfiguration().getClientCertData());
@@ -55,6 +53,10 @@ public class EmployeeKubernetesTest {
         System.setProperty(Config.KUBERNETES_AUTH_TRYKUBECONFIG_SYSTEM_PROPERTY, "false");
         System.setProperty(Config.KUBERNETES_HTTP2_DISABLE, "true");
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
+
+        ConfigMap cm = client.configMaps().inNamespace("default")
+                .create(buildConfigMap(mongodb.getMappedPort(27017)));
+        LOG.info("!!! {}", cm);
     }
 
     @Autowired

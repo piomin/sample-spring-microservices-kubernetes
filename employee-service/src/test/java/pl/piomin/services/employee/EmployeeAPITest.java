@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EmployeeAPITest {
 
     @Container
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
 
     @DynamicPropertySource
 	static void registerMongoProperties(DynamicPropertyRegistry registry) {

@@ -1,7 +1,7 @@
 apiVersion: skaffold/v4beta5
 kind: Config
 metadata:
-  name: employee-service
+  name: sample-spring-microservices-kubernetes
 build:
   artifacts:
     - image: piomin/admin
