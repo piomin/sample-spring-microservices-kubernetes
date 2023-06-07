@@ -11,7 +11,7 @@ spec:
       labels:
         app: admin
     spec:
-      serviceAccountName: spring-cloud-admin
+      serviceAccountName: spring-cloud-kubernetes
       containers:
       - name: admin
         image: piomin/admin

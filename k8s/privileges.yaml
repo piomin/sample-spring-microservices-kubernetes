@@ -4,7 +4,7 @@ metadata:
   name: spring-cloud-kubernetes
   namespace: default
 ---
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: spring-cloud-kubernetes
@@ -14,7 +14,7 @@ rules:
     resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
     verbs: ["get", "list", "watch"]
 ---
-kind: RoleBinding
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: spring-cloud-kubernetes
@@ -22,6 +22,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: spring-cloud-kubernetes
+    namespace: default
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: spring-cloud-kubernetes
