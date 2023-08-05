@@ -1,26 +1,32 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: gateway-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  backend:
-    serviceName: default-http-backend
-    servicePort: 80
   rules:
-  - host: microservices.info
+  - host: gateway.${minikube ip}.nip.io
     http:
       paths:
       - path: /employee
+        pathType: Prefix
         backend:
-          serviceName: employee
-          servicePort: 8080
+          service:
+            name: employee
+            port:
+              number: 8080
       - path: /department
+        pathType: Prefix
         backend:
-          serviceName: department
-          servicePort: 8080
+          service:
+            name: department
+            port:
+              number: 8080
       - path: /organization
+        pathType: Prefix
         backend:
-          serviceName: organization
-          servicePort: 8080
+          service:
+            name: organization
+            port:
+              number: 8080

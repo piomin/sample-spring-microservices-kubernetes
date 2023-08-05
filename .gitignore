@@ -168,3 +168,6 @@
 /organization-service/organization-service.iml
 /.idea/sample-spring-microservices-kubernetes.iml
 /.idea/vcs.xml
+**/target
+**/*.iml
+.idea
