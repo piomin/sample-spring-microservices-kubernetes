@@ -46,7 +46,7 @@
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-server-mock</artifactId>
-            <version>6.9.0</version>
+            <version>6.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
