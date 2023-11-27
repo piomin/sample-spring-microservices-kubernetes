@@ -47,7 +47,6 @@ jobs:
       - run:
           name: Deploy to K8s
           command: |
-#            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
             skaffold run
       - run:
           name: Delete Kind Cluster
