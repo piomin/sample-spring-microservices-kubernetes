@@ -9,6 +9,50 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -DskipTests
+  deploy-k8s:
+    executor: machine_executor_amd64
+    steps:
+      - checkout
+      - run:
+          name: Install Kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x kubectl
+            sudo mv ./kubectl /usr/local/bin/kubectl
+      - run:
+          name: Install Skaffold
+          command: |
+            curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+            chmod +x skaffold
+            sudo mv skaffold /usr/local/bin
+      - run:
+          name: Install Kind
+          command: |
+            [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+            chmod +x ./kind
+            sudo mv ./kind /usr/local/bin/kind
+#      - run:
+#          name: Install OpenJDK 21
+#          command: |
+#            java -version
+#            sudo apt-get update && sudo apt-get install openjdk-21-jdk
+#            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+#            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
+#            java -version
+#            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+      - run:
+          name: Create Kind Cluster
+          command: |
+            kind create cluster --name c1
+      - run:
+          name: Deploy to K8s
+          command: |
+#            export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+            skaffold run
+      - run:
+          name: Delete Kind Cluster
+          command: |
+            kind delete cluster --name c1
 
 orbs:
   maven: circleci/maven@1.4.1
@@ -18,6 +62,12 @@ executors:
   jdk:
     docker:
       - image: 'cimg/openjdk:17.0'
+  machine_executor_amd64:
+    machine:
+      image: ubuntu-2204:2023.10.1
+    environment:
+      architecture: "amd64"
+      platform: "linux/amd64"
 
 workflows:
   maven_test:
@@ -29,3 +79,4 @@ workflows:
             - tcc/setup
       - analyze:
           context: SonarCloud
+      - deploy-k8s
