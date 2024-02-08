@@ -18,7 +18,7 @@
         <java.version>17</java.version>
         <springdoc.version>2.3.0</springdoc.version>
         <spring-cloud.version>2022.0.5</spring-cloud.version>
-        <testcontainers.version>1.19.4</testcontainers.version>
+        <testcontainers.version>1.19.5</testcontainers.version>
         <sonar.projectKey>piomin_spring-microservices-kubernetes</sonar.projectKey>
         <sonar.organization>piomin</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
