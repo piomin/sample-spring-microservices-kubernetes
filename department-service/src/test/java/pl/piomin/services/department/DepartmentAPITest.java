@@ -1,14 +1,12 @@
 package pl.piomin.services.department;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,16 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
                 "spring.cloud.kubernetes.discovery.enabled=false",
                 "spring.cloud.kubernetes.config.enabled=false"})
 @Testcontainers
-@TestMethodOrder(MethodOrderer.Alphanumeric.class)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class DepartmentAPITest {
 
     @Container
+    @ServiceConnection
     static MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
-
-    @DynamicPropertySource
-    static void registerMongoProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongodb::getReplicaSetUrl);
-    }
 
     @Autowired
     TestRestTemplate restTemplate;

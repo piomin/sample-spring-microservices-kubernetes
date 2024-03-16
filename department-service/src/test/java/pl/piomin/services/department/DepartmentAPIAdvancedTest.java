@@ -6,7 +6,6 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.server.mock.EnableKubernetesMockClient;
 import io.specto.hoverfly.junit.core.Hoverfly;
 import io.specto.hoverfly.junit5.HoverflyExtension;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -60,15 +58,18 @@ public class DepartmentAPIAdvancedTest {
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
 
         ConfigMap cm = client.configMaps()
-                .create(buildConfigMap(mongodb.getMappedPort(27017)));
+                .resource(buildConfigMap(mongodb.getMappedPort(27017)))
+                .create();
         LOG.info("!!! {}", cm);
 
         Service s = client.services()
-                .create(buildService());
+                .resource(buildService())
+                .create();
         LOG.info("!!! {}", s);
 
         Endpoints e = client.endpoints()
-                .create(buildEndpoints());
+                .resource(buildEndpoints())
+                .create();
         LOG.info("!!! {}", e);
     }
 

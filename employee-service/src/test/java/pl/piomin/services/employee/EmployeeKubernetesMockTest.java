@@ -3,7 +3,6 @@ package pl.piomin.services.employee;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
 import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.server.mock.EnableKubernetesMockClient;
 import org.junit.jupiter.api.*;
@@ -16,8 +15,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.k3s.K3sContainer;
-import org.testcontainers.utility.DockerImageName;
 import pl.piomin.services.employee.model.Employee;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +44,8 @@ public class EmployeeKubernetesMockTest {
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
 
         ConfigMap cm = client.configMaps()
-                .create(buildConfigMap(mongodb.getMappedPort(27017)));
+                .resource(buildConfigMap(mongodb.getMappedPort(27017)))
+                .create();
         LOG.info("!!! {}", cm);
     }
 
