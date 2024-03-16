@@ -3,7 +3,8 @@ package pl.piomin.services.employee;
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.ConfigMapBuilder;
 import io.fabric8.kubernetes.client.Config;
-import io.fabric8.kubernetes.client.DefaultKubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.KubernetesClientBuilder;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class EmployeeKubernetesTest {
     @BeforeAll
     static void setup() {
         Config config = Config.fromKubeconfig(k3s.getKubeConfigYaml());
-        DefaultKubernetesClient client = new DefaultKubernetesClient(config);
+        KubernetesClient client = new KubernetesClientBuilder().withConfig(config).build();
 
         System.setProperty(Config.KUBERNETES_MASTER_SYSTEM_PROPERTY, client.getConfiguration().getMasterUrl());
         System.setProperty(Config.KUBERNETES_CLIENT_CERTIFICATE_DATA_SYSTEM_PROPERTY,
@@ -55,7 +56,7 @@ public class EmployeeKubernetesTest {
         System.setProperty(Config.KUBERNETES_NAMESPACE_SYSTEM_PROPERTY, "default");
 
         ConfigMap cm = client.configMaps().inNamespace("default")
-                .create(buildConfigMap(mongodb.getMappedPort(27017)));
+                .createOrReplace(buildConfigMap(mongodb.getMappedPort(27017)));
         LOG.info("!!! {}", cm);
     }
 
