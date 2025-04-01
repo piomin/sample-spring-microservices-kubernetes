@@ -36,7 +36,7 @@ public class EmployeeKubernetesTest {
     @Container
     static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
     @Container
-    static K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:v1.21.3-k3s1"));
+    static K3sContainer k3s = new K3sContainer(DockerImageName.parse("rancher/k3s:latest"));
 
     @BeforeAll
     static void setup() {
