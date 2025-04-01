@@ -25,7 +25,7 @@ public class DepartmentAPITest {
 
     @Container
     @ServiceConnection
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:4.4");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
 
     @Autowired
     TestRestTemplate restTemplate;

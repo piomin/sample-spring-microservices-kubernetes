@@ -35,7 +35,7 @@ public class EmployeeKubernetesMockTest {
     static KubernetesClient client;
 
     @Container
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:8.0");
 
     @BeforeAll
     static void setup() {
