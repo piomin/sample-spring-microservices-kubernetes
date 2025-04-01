@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -21,11 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         "spring.cloud.kubernetes.config.enabled=false"})
 @Testcontainers
 @TestMethodOrder(MethodOrderer.MethodName.class)
+@DirtiesContext
 class EmployeeAPITest {
 
     @Container
     @ServiceConnection
-    static MongoDBContainer mongodb = new MongoDBContainer("mongo:5.0");
+    static MongoDBContainer mongodb = new MongoDBContainer("mongo:8.0");
 
     @Autowired
     TestRestTemplate restTemplate;
