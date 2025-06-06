@@ -33,16 +33,4 @@ public class GatewayApi {
         return urls;
     }
 
-//    @Bean
-//    public List<GroupedOpenApi> apis() {
-//        List<GroupedOpenApi> groups = new ArrayList<>();
-//        List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
-//        assert definitions != null;
-//        definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches("employee|department|organization"))
-//                .forEach(routeDefinition -> {
-//                    String name = routeDefinition.getId();
-//                    groups.add(GroupedOpenApi.builder().pathsToMatch("/" + routeDefinition.getId() + "/**").group(name).build());
-//                });
-//        return groups;
-//    }
 }
