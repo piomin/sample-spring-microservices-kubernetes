@@ -1,31 +1,33 @@
 package pl.piomin.services.gateway.api;
 
-import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties.SwaggerUrl;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static org.springdoc.core.utils.Constants.DEFAULT_API_DOCS_URL;
 
 @Configuration
 public class GatewayApi {
 
-	@Autowired
-	RouteDefinitionLocator locator;
-
-	@Bean
-	public List<GroupedOpenApi> apis() {
-		List<GroupedOpenApi> groups = new ArrayList<>();
-		List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
-		assert definitions != null;
-		definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches("employee|department|organization"))
-				.forEach(routeDefinition -> {
-			String name = routeDefinition.getId();
-			groups.add(GroupedOpenApi.builder().pathsToMatch("/" + routeDefinition.getId() + "/**").group(name).build());
-		});
-		return groups;
-	}
+    @Bean
+    @Lazy(false)
+    public Set<SwaggerUrl> apis(RouteDefinitionLocator locator, SwaggerUiConfigProperties swaggerUiConfigProperties) {
+        Set<SwaggerUrl> urls = new HashSet<>();
+        List<RouteDefinition> definitions = locator.getRouteDefinitions().collectList().block();
+        definitions.stream().filter(routeDefinition -> routeDefinition.getId().matches(".*-service")).forEach(routeDefinition -> {
+            String name = routeDefinition.getId().replaceAll("-service", "");
+            SwaggerUrl swaggerUrl = new SwaggerUrl(name, DEFAULT_API_DOCS_URL + "/" + name, null);
+            urls.add(swaggerUrl);
+        });
+        swaggerUiConfigProperties.setUrls(urls);
+        return urls;
+    }
 }
