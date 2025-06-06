@@ -8,6 +8,7 @@ data:
      cloud:
       kubernetes:
         discovery:
-          all-namespaces: true
           service-labels:
             spring-boot: true
+          #enable if your admin is deployed in the different namespace then microservices 
+          #all-namespaces: true
