@@ -54,7 +54,7 @@ jobs:
             kind delete cluster --name c1
 
 orbs:
-  maven: circleci/maven@2.1.0
+  maven: circleci/maven@2.1.1
 
 executors:
   machine_executor_amd64:
