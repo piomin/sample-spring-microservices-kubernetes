@@ -1,0 +1,8 @@
+image:
+  tag: "prod"
+service:
+  type: LoadBalancer
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi

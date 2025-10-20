@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gateway-service.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "gateway-service.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "gateway-service.name" . }}
+    spec:
+      serviceAccountName: spring-cloud-kubernetes
+      containers:
+      - name: gateway
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+          - containerPort: {{ .Values.service.port }}

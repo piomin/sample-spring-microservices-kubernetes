@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: piomin/department
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 180Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+env:
+  - name: SPRING_CLOUD_BOOTSTRAP_ENABLED
+    value: "true"
+  - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLEAPI
+    value: "true"

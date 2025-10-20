@@ -1,0 +1,9 @@
+mongodb:
+  image: mongo:latest
+  databaseName: stage-db
+  username: stageuser
+  password: Stage_123
+  servicePort: 27017
+
+ingress:
+  host: stage.microservices.info

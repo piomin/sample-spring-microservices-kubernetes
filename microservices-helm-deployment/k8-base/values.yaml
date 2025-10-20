@@ -1,0 +1,12 @@
+mongodb:
+  image: mongo:latest
+  databaseName: admin
+  username: piotr
+  password: Piot_123
+  servicePort: 27017
+
+ingress:
+  host: microservices.info
+
+rbac:
+  serviceAccountName: spring-cloud-kubernetes
