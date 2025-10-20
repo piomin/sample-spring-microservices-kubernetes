@@ -1,0 +1,6 @@
+apiVersion: v2
+name: k8-base
+description: Common Helm chart for infrastructure components (MongoDB, Ingress, RBAC)
+type: application
+version: 1.0.0
+appVersion: "1.0"

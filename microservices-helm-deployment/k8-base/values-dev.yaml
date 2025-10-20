@@ -1,0 +1,9 @@
+mongodb:
+  image: mongo:latest
+  databaseName: dev-db
+  username: devuser
+  password: Dev_123
+  servicePort: 27017
+
+ingress:
+  host: dev.microservices.info

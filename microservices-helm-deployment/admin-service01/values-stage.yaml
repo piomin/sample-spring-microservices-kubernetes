@@ -1,0 +1,8 @@
+image:
+  tag: "stage"
+service:
+  type: ClusterIP
+resources:
+  limits:
+    cpu: 250m
+    memory: 300Mi

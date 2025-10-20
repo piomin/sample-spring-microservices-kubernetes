@@ -1,0 +1,9 @@
+mongodb:
+  image: mongo:latest
+  databaseName: prod-db
+  username: produser
+  password: Prod_123
+  servicePort: 27017
+
+ingress:
+  host: microservices.info

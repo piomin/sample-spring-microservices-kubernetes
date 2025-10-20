@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: piomin/admin
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8080
+  targetPort: 8080
+
+env:
+  - name: SPRING_CLOUD_BOOTSTRAP_ENABLED
+    value: "true"
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  requests:
+    cpu: 200m
+    memory: 180Mi
