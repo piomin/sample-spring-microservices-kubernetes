@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   analyze:
     docker:
-      - image: 'cimg/openjdk:21.0.9'
+      - image: 'cimg/openjdk:25.0'
     steps:
       - checkout
       - run:
