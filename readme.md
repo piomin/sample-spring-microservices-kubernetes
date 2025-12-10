@@ -49,3 +49,9 @@ Go to the `k8s` directory. You will find there several YAML scripts you need to 
 Just apply those scripts using `kubectl apply`.
 
 You can easily deploy all applications using `skaffold dev` command.
+
+## Books
+
+If you are interested in Java, Spring Boot and Kubernetes, you may find my book "Hands-On Java with Kubernetes" useful. To get a book, go to the following website: [Hands-On Java with Kubernetes](https://leanpub.com/hands-on-java-with-kubernetes).
+
+<a href="https://leanpub.com/hands-on-java-with-kubernetes"><img src="book.png" alt="Cover" style="width: 40%;" /></a>
