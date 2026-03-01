@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>25</java.version>
-        <springdoc.version>3.0.1</springdoc.version>
+        <springdoc.version>3.0.2</springdoc.version>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
         <testcontainers.version>1.21.4</testcontainers.version>
         <sonar.projectKey>piomin_spring-microservices-kubernetes</sonar.projectKey>
